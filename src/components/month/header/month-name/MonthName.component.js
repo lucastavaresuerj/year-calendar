@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 
 import { MonthContext } from "contexts/MonthContext";
+import { YearContext } from "contexts/YearContext";
 
 export default function MonthName({ children }) {
+  const { monthNumber } = useContext(MonthContext);
   const {
-    config: { name },
-    monthNumber,
-  } = useContext(MonthContext);
+    config: { name, months },
+  } = useContext(YearContext);
 
   function makeTitle() {
     const date = new Date();
@@ -16,7 +17,8 @@ export default function MonthName({ children }) {
   }
 
   const style = {
-    color: name.color,
+    color: months[monthNumber].textColor,
+
     fontSize: name.size,
     textAling: name.aling,
     fontStyle: name.style,

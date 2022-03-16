@@ -9,8 +9,21 @@ import Month from "components/month/Month.component";
 export default function Year({}) {
   const {
     yearNumber,
-    config: { months, year },
+    config: { year },
   } = useContext(YearContext);
+
+  function makeMonths() {
+    const months = [];
+
+    for (let month = 0; month < 12; month++) {
+      months.push(
+        <MonthProvider key={`y-${yearNumber}-m-${month}`} monthNumber={month}>
+          <Month />
+        </MonthProvider>
+      );
+    }
+    return months;
+  }
 
   return (
     <>
@@ -18,11 +31,7 @@ export default function Year({}) {
         {yearNumber}
       </Header>
       <Grid container columns={year.col} className="year">
-        {months.map(({ month }) => (
-          <MonthProvider key={`y-${yearNumber}-m-${month}`} monthNumber={month}>
-            <Month />
-          </MonthProvider>
-        ))}
+        {makeMonths()}
       </Grid>
     </>
   );

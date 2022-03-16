@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Table, Grid } from "semantic-ui-react";
 
+import { YearContext } from "contexts/YearContext";
 import { MonthContext } from "contexts/MonthContext";
 
 import MonthDays from "./days/MonthDays.component";
@@ -8,12 +9,13 @@ import MonthHeader from "./header/MonthHeader.component";
 import MonthWeekDays from "./weekdays/MonthWeekDays.component";
 
 export default function Month() {
+  const { monthNumber } = useContext(MonthContext);
   const {
-    config: { month },
-  } = useContext(MonthContext);
+    config: { months },
+  } = useContext(YearContext);
 
   return (
-    <Grid.Column className="month" color={month.color}>
+    <Grid.Column className="month" color={months[monthNumber].color}>
       <Table unstackable>
         <MonthHeader />
         <Table.Body>

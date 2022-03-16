@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Table } from "semantic-ui-react";
 
-import { MonthContext } from "contexts/MonthContext";
+import { YearContext } from "contexts/YearContext";
 
 import MonthName from "./month-name/MonthName.component";
 import MonthNumber from "./month-number/MonthNumber.component";
@@ -11,7 +11,7 @@ import "./MonthHeader.scss";
 export default function MonthHeader() {
   const {
     config: { header },
-  } = useContext(MonthContext);
+  } = useContext(YearContext);
 
   const headerStyle = {
     backgroundColor: header.background,

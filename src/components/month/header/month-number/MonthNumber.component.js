@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 
 import { MonthContext } from "contexts/MonthContext";
+import { YearContext } from "contexts/YearContext";
 
-export default function MonthNumber({ month, config }) {
+export default function MonthNumber() {
+  const { monthNumber } = useContext(MonthContext);
   const {
     config: { number },
-    monthNumber,
-  } = useContext(MonthContext);
+  } = useContext(YearContext);
 
   const style = {
     float: number.side,
