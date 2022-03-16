@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
-import { MonthContext } from "contexts/MonthContext";
-import { YearContext } from "contexts/YearContext";
+import { MonthContext } from "contexts/Month.context";
+import { YearContext } from "contexts/Year.context";
 
 export default function MonthNumber() {
   const { monthNumber } = useContext(MonthContext);

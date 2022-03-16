@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Table, Grid } from "semantic-ui-react";
 
-import { YearContext } from "contexts/YearContext";
-import { MonthContext } from "contexts/MonthContext";
+import { YearContext } from "contexts/Year.context";
+import { MonthContext } from "contexts/Month.context";
 
 import MonthDays from "./days/MonthDays.component";
 import MonthHeader from "./header/MonthHeader.component";

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Table } from "semantic-ui-react";
 
-import { YearContext } from "contexts/YearContext";
+import { YearContext } from "contexts/Year.context";
 
 import MonthName from "./month-name/MonthName.component";
 import MonthNumber from "./month-number/MonthNumber.component";

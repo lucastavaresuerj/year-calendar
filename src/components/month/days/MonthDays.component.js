@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Table } from "semantic-ui-react";
 
-import { YearContext } from "contexts/YearContext";
-import { MonthContext } from "contexts/MonthContext";
+import { YearContext } from "contexts/Year.context";
+import { MonthContext } from "contexts/Month.context";
 
 const config = {
   days: {
