@@ -1,0 +1,46 @@
+Description: Root Stack for year calendar project
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  SavesBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  SavesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SavesBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - "s3:GetObject"
+            Effect: Allow
+            Resource: !Sub "arn:aws:s3:::${SavesBucket}/*"
+            Principal: "*"
+
+Outputs:
+  Region:
+    Description: CloudFormation provider root stack Region
+    Value: !Ref "AWS::Region"
+    Export:
+      Name: !Sub "${AWS::StackName}-Region"
+  StackName:
+    Description: CloudFormation provider root stack ID
+    Value: !Ref "AWS::StackName"
+    Export:
+      Name: !Sub "${AWS::StackName}-StackName"
+  StackId:
+    Description: CloudFormation provider root stack name
+    Value: !Ref "AWS::StackId"
+    Export:
+      Name: !Sub "${AWS::StackName}-StackId"
+  BucketName:
+    Description: CloudFormation provider root stack deployment bucket name
+    Value: !Ref SavesBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketName"

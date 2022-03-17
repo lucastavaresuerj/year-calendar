@@ -1,0 +1,118 @@
+Description: Root Stack for online calendar project
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  AuthRoleName:
+    Type: String
+    Default: AuthRoleName-Calendar
+    Description: Name of the common deployment bucket provided by the parent stack
+  UnauthRoleName:
+    Type: String
+    Default: UnauthRoleName-Calendar
+    Description: Name of the common deployment bucket provided by the parent stack
+  S3SavesStackName:
+    Type: String
+    Default: saves-bucket-calendar-year
+
+Outputs:
+  Region:
+    Description: CloudFormation provider root stack Region
+    Value: !Ref "AWS::Region"
+    Export:
+      Name: !Sub "${AWS::StackName}-Region"
+  StackName:
+    Description: CloudFormation provider root stack ID
+    Value: !Ref "AWS::StackName"
+    Export:
+      Name: !Sub "${AWS::StackName}-StackName"
+  StackId:
+    Description: CloudFormation provider root stack name
+    Value: !Ref "AWS::StackId"
+    Export:
+      Name: !Sub "${AWS::StackName}-StackId"
+  DeploymentBucketName:
+    Description: CloudFormation provider root stack deployment bucket name
+    Value:
+      Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+  AuthRoleName:
+    Value: !Ref AuthRoleName
+  UnauthRoleName:
+    Value: !Ref UnauthRoleName
+
+Resources:
+  AuthOnlineGallery:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/auth/auth-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        S3SavesStackName: !Ref S3SavesStackName
+        AuthRoleName: !Ref AuthRoleName
+        UnauthRoleName: !Ref UnauthRoleName
+        AllowUnauthenticatedIdentities: true
+        AutoVerifiedAttributes: email
+        MfaConfiguration: "OFF"
+        MfaTypes: SMS Text Message
+        SmsAuthenticationMessage: "Your authentication code is {####}"
+        SmsVerificationMessage: "Your verification code is {####}"
+        EmailVerificationSubject: Your verification code
+        EmailVerificationMessage: "Your verification code is {####}"
+        DefaultPasswordPolicy: false
+        PasswordPolicyMinLength: 8
+        PasswordPolicyCharacters: ""
+        RequiredAttributes: email
+        AliasAttributes: ""
+        UserpoolClientGenerateSecret: false
+        UserpoolClientRefreshTokenValidity: 30
+        UserpoolClientWriteAttributes: email
+        UserpoolClientReadAttributes: email
+        UserpoolClientLambdaRole: online_gallery_userpoolclient_lambda_role
+        UserpoolClientSetAttributes: false
+        ResourceName: online-gallery
+        AuthSelections: identityPoolAndUserPool
+        UseDefault: default
+        UserPoolGroupList: ""
+        ServiceName: Cognito
+        UsernameCaseSensitive: false
+        UseEnabledMfas: true
+        BreakCircularDependency: true
+        DependsOn: ""
+        Env: dev
+
+  CodeBuildDeployTemplate:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/templatebuild-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        S3BucketDeploy:
+          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        MainStackName: !Ref "AWS::StackName"
+        MainStackID: !Ref "AWS::StackId"
+
+  FrontStorageOnlineGallery:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/front/front-storage-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
+  CodeBuildOnlineGallery:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/codebuild-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        S3BucketWebSite: !GetAtt FrontStorageOnlineGallery.Outputs.S3BucketName
+        IdentityPoolId: !GetAtt AuthOnlineGallery.Outputs.IdentityPoolId
+        CognitoRegion: !GetAtt AuthOnlineGallery.Outputs.Region
+        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
+        UserPoolWebClientId: !GetAtt AuthOnlineGallery.Outputs.AppClientIDWeb

@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Using code build to deploy the templates to aws cloudformation
+Parameters:
+  S3BucketDeploy:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  MainStackName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  MainStackID:
+    Type: String
+  GitHubOwner:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: lucastavaresuerj
+  GitHubRepository:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: gallery-aws
+  GitHubBranch:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: main
+  CodeBuildEnvironmentImage:
+    Type: String
+    Default: "aws/codebuild/standard:4.0"
+
+Resources:
+  DeployBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref S3BucketDeploy
+      PolicyDocument:
+        Statement:
+          - Action: "*"
+            Effect: Allow
+            Resource:
+              - !Sub "arn:aws:s3:::${S3BucketDeploy}"
+              - !Sub "arn:aws:s3:::${S3BucketDeploy}/*"
+            Principal:
+              AWS:
+                - !GetAtt CodeBuildServiceRole.Arn
+    DependsOn: CodeBuilProject
+
+  CodeBuildServiceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: !Sub "root-codebuild-stack-${AWS::StackName}"
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: Admin
+                Effect: Allow
+                Action:
+                  - "*"
+                Resource:
+                  - "*"
+  CodeBuilProject:
+    Type: "AWS::CodeBuild::Project"
+    Properties:
+      Name: !Sub "${AWS::StackName}-template"
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Source:
+        Type: GITHUB
+        Location: !Sub "https://github.com/${GitHubOwner}/${GitHubRepository}.git"
+        BuildSpec: templatespec.yaml
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Triggers:
+        Webhook: true
+        FilterGroups:
+          - - Type: EVENT
+              Pattern: PUSH
+            - Type: HEAD_REF
+              Pattern: !Sub "^refs/heads/${GitHubBranch}$"
+            - Type: COMMIT_MESSAGE
+              Pattern: \[template\]
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: !Ref CodeBuildEnvironmentImage
+        EnvironmentVariables:
+          - Name: ENV_NAME
+            Value: build
+          - Name: S3_BUCKET_NAME
+            Value: !Ref S3BucketDeploy
+          - Name: STACK_NAME
+            Value: !Ref MainStackName
+
+Outputs:
+  CodeBuild:
+    Description: "Reference of code build for build templates project"
+    Value: !Ref CodeBuilProject
+  SayIsOk:
+    Description: "Just for test if is building"
+    Value: "Is oooooook!"

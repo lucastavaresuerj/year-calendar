@@ -1,0 +1,39 @@
+version: 0.2
+
+env:
+  variables:
+    S3_BUCKET_NAME: ""
+    PROJECT_ANGULAR_NAME: "gallery"
+    IDENTITY_POOL_ID: ""
+    COGNITO_REGION: ""
+    USERPOOL_ID: ""
+    USERPOOL_WEBCLIENT_ID: ""
+    S3_STORAGE_NAME: ""
+    S3_STORAGE_REGION: ""
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - echo Installing...
+      - npm install --prefix ./${PROJECT_ANGULAR_NAME}
+
+  build:
+    commands:
+      - echo Building...
+      - |
+        echo "export const env = {\
+          IDENTITY_POOL_ID: '${IDENTITY_POOL_ID}',\
+          COGNITO_REGION: '${COGNITO_REGION}',\
+          USERPOOL_ID: '${USERPOOL_ID}',\
+          USERPOOL_WEBCLIENT_ID: '${USERPOOL_WEBCLIENT_ID}',\
+          S3_STORAGE_NAME: '${S3_STORAGE_NAME}',\
+          S3_STORAGE_REGION: '${S3_STORAGE_REGION}'\
+        };" > ./${PROJECT_ANGULAR_NAME}/src/environments/secret.prod.ts
+      - npm run build --prefix ./${PROJECT_ANGULAR_NAME}
+
+  post_build:
+    commands:
+      - echo syncing files with s3://${S3_BUCKET_NAME}...
+      - aws s3 sync ./${PROJECT_ANGULAR_NAME}/dist/${PROJECT_ANGULAR_NAME} s3://${S3_BUCKET_NAME} --delete

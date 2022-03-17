@@ -1,0 +1,16 @@
+version: 0.2
+
+env:
+  variables:
+    S3_BUCKET_NAME: ""
+    STACK_NAME: ""
+
+phases:
+  build:
+    commands:
+      - aws s3 sync ./cfn-templates s3://${S3_BUCKET_NAME}/cfn-templates --delete
+      - |
+        aws cloudformation update-stack --stack-name ${STACK_NAME} \
+        --template-body file://cfn-templates/main-template.yaml \
+        --parameters file://cfn-templates/parameters.json \
+        --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
