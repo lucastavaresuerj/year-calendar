@@ -1,0 +1,11 @@
+@mixin month-number {
+  &.with-number {
+    .month-number {
+      display: unset;
+      float: right;
+    }
+  }
+  .month-number {
+    display: none;
+  }
+}
