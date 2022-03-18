@@ -16,7 +16,7 @@ Parameters:
   GitHubRepository:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: gallery-aws
+    Default: year-calendar
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
