@@ -19,9 +19,9 @@
   },
   "scripts": {
     "copyenvs": "cp ./src/environments/${NODE_ENV}.js ./src/environments/environment.js",
-    "prestart": "NODE_ENV=local && npm run-script copyenvs",
+    "prestart": "NODE_ENV=local npm run-script copyenvs",
     "start": "react-scripts start",
-    "prebuild": "NODE_ENV=production && npm run-script copyenvs",
+    "prebuild": "NODE_ENV=production npm run-script copyenvs",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
