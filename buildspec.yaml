@@ -33,4 +33,4 @@ phases:
   post_build:
     commands:
       - echo syncing files with s3://${S3_BUCKET_NAME}...
-      - aws s3 sync ./${PROJECT_REACT_NAME}/dist/${PROJECT_REACT_NAME} s3://${S3_BUCKET_NAME} --delete
+      - aws s3 sync ./${PROJECT_REACT_NAME}/build/${PROJECT_REACT_NAME} s3://${S3_BUCKET_NAME} --delete
