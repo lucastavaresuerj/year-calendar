@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
+import Amplify from "aws-amplify";
+import { amplifyConfig } from "environments";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-// import "semantic-ui-css/semantic.min.css";
+Amplify.configure(amplifyConfig);
 
 ReactDOM.render(
   <React.StrictMode>
