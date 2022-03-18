@@ -300,6 +300,8 @@ Resources:
         AuthRoleArn: !GetAtt AuthRole.Arn
         UnauthRoleArn: !GetAtt UnauthRole.Arn
         IdentityPoolId: !Ref IdentityPool
+    DependsOn:
+      - IdentityPoolRoleMap
 
 Outputs:
   IdentityPoolId:

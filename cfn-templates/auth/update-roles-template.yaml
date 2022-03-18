@@ -19,7 +19,7 @@ Resources:
       Code:
         ZipFile: |
           const response = require('cfn-response');
-          onst aws = require('aws-sdk')
+          const aws = require('aws-sdk')
           let responseData = {};
           exports.handler = function(event, context) {
             try {
