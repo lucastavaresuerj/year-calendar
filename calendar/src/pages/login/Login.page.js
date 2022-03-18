@@ -1,7 +1,7 @@
 import React from "react";
 
-import { UserContext } from "contexts/User.contex";
+import { LoginForm } from "components/auth";
 
 export default function Login() {
-  return <div>Login</div>;
+  return <LoginForm />;
 }

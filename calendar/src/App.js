@@ -1,15 +1,17 @@
 import React from "react";
 import { useRoutes, Navigate } from "react-router-dom";
 
-import UserProvider from "contexts/User.contex";
+import "styles/style.scss";
+
+import UserProvider from "contexts/User.context";
 import { NavOutlet, AuthOutlet } from "outlets";
 import { Home, Login, MyCalendars } from "./pages/index";
 
-function multipleRoutes({ routes = [], element, ...props }) {
-  return routes.map((path) => ({ path, element, ...props }));
-}
+export default function App() {
+  function multipleRoutes({ routes = [], element, ...props }) {
+    return routes.map((path) => ({ path, element, ...props }));
+  }
 
-function App() {
   const routes = useRoutes([
     {
       path: "/",
@@ -43,5 +45,3 @@ function App() {
 
   return <UserProvider>{routes}</UserProvider>;
 }
-
-export default App;
