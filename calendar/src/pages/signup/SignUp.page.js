@@ -3,15 +3,15 @@ import { Button, Segment, Message, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import { UserContext } from "contexts/User.context";
-import { SignInForm } from "components/auth";
+import { SignUpForm } from "components/auth";
 
-export default function SignIn() {
-  const { signIn } = useContext(UserContext);
+export default function SignUp() {
+  const { signUp } = useContext(UserContext);
 
-  async function onSubmit({ username, password }) {
-    console.log({ username, password });
+  async function onSubmit({ username, password, email }) {
+    console.log({ username, password, email });
     try {
-      await signIn({ username, password });
+      await signUp({ username, password, attributes: { email } });
     } catch (error) {
       console.log(error.name, error);
     }
@@ -20,16 +20,16 @@ export default function SignIn() {
   return (
     <>
       <Segment attached>
-        <SignInForm onSubmit={onSubmit}>
+        <SignUpForm onSubmit={onSubmit}>
           <Button primary type="submit">
-            Sign In
+            Create User
           </Button>
-        </SignInForm>
+        </SignUpForm>
       </Segment>
       <Message attached="bottom" warning>
         <Icon name="help" />
-        Don't signed up yet?
-        <Link to="/auth/signup"> Sign up here</Link> instead.
+        Already signed up?
+        <Link to="/auth/signin"> Sign in here</Link> instead.
       </Message>
     </>
   );
