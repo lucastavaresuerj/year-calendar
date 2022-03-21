@@ -5,7 +5,7 @@ import "styles/style.scss";
 
 import UserProvider from "contexts/User.context";
 import { NavOutlet, AuthOutlet } from "outlets";
-import { Home, Login, MyCalendars } from "./pages/index";
+import { Home, SignIn, MyCalendars } from "./pages/index";
 
 export default function App() {
   function multipleRoutes({ routes = [], element, ...props }) {
@@ -33,7 +33,7 @@ export default function App() {
       children: [
         {
           path: "login",
-          element: <Login />,
+          element: <SignIn />,
         },
         ...multipleRoutes({
           routes: ["", "*"],

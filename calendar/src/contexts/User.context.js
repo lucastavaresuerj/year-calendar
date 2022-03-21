@@ -3,16 +3,20 @@ import { Auth } from "aws-amplify";
 
 export const UserContext = createContext({
   user: null,
-  signin: () => {},
-  logout: () => {},
-  signup: () => {},
+  signIn: () => {},
+  signOut: () => {},
+  signUp: () => {},
   resendConfirmationCode: () => {},
 });
 
 export default function UserProvider({ children }) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({
+    username: "",
+    userConfirmed: false,
+    userSub: "",
+  });
 
-  async function signin({ username, password }) {
+  async function signIn({ username, password }) {
     try {
       const user = await Auth.signIn(username, password);
       console.log(user);
@@ -22,7 +26,7 @@ export default function UserProvider({ children }) {
     }
   }
 
-  async function signup({ username, password, attributes: { email } }) {
+  async function signUp({ username, password, attributes: { email } }) {
     try {
       const { user, userConfirmed, userSub } = await Auth.signUp({
         username,
@@ -57,7 +61,7 @@ export default function UserProvider({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ user, signin, signOut, signup, resendConfirmationCode }}
+      value={{ user, signIn, signOut, signUp, resendConfirmationCode }}
     >
       {children}
     </UserContext.Provider>

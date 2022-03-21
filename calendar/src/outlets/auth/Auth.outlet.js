@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Grid, Message } from "semantic-ui-react";
+import { Grid, Message, Segment } from "semantic-ui-react";
 
 export default function AuthOutlet() {
   return (
