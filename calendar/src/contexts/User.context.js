@@ -21,6 +21,9 @@ export default function UserProvider({ children }) {
       const user = await Auth.signIn(username, password);
       console.log(user);
     } catch (err) {
+      if (err.name == "UserNotConfirmedException") {
+        setUser({ ...user, username, password });
+      }
       console.log("error signing in", err);
       throw err;
     }

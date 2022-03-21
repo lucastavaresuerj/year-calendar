@@ -29,11 +29,15 @@ export default function Routes() {
       element: <AuthOutlet />,
       children: [
         {
+          path: "signup",
+          element: <SignUp />,
+        },
+        {
           path: "signin",
           element: <SignIn />,
         },
         {
-          path: "signup",
+          path: "code",
           element: <SignUp />,
         },
         ...multipleRoutes({
