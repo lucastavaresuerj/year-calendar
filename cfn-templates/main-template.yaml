@@ -110,7 +110,7 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
-        UserPoolId: !GetAtt AuthOnlineGallery.UserPoolId
+        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
 
   GraphQLApi:
