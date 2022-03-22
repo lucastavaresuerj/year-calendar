@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create a GraphQL from AppSync
+
+Parameters:
+  GraphQlApiName:
+    Type: String
+    Default: Calendar-Year-GraphQL
+  UserPoolId:
+    Type: String
+  UserPoolAwsRegion:
+    Type: String
+Resources:
+  GraphQLApi:
+    Type: AWS::AppSync::GraphQLApi
+    Properties:
+      Name: !Ref GraphQlApiName
+      AuthenticationType: "AMAZON_COGNITO_USER_POOLS"
+      UserPoolConfig:
+        UserPoolId: !Ref UserPoolId
+        AwsRegion: !Ref UserPoolAwsRegion
+        DefaultAction: ALLOW
+
+Outputs:
+  GraphQLName:
+    Value: !GetAtt GraphQL.ApiId
+    Description: The GraphQL name
+  GraphQLArn:
+    Value: !GetAtt GraphQL.Arn
+    Description: The Amazon Resource Name (ARN) of the API key
+  GraphQLUrl:
+    Value: !GetAtt GraphQL.GraphQLUrl
+    Description: The Endpoint URL of the GraphQL API.

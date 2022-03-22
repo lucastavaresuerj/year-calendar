@@ -102,6 +102,25 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
 
+  DynamoDbTable:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/storage/database-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        UserPoolId: !GetAtt AuthOnlineGallery.UserPoolId
+        UserPoolAwsRegion: !Ref "AWS::Region"
+
+  GraphQLApi:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/graphQL/graphql-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
   CodeBuildOnlineGallery:
     Type: "AWS::CloudFormation::Stack"
