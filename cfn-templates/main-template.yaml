@@ -109,9 +109,6 @@ Resources:
         - "https://s3.amazonaws.com/${Bucket}/cfn-templates/storage/database-template.yaml"
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-      Parameters:
-        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
-        UserPoolAwsRegion: !Ref "AWS::Region"
 
   GraphQLApi:
     Type: "AWS::CloudFormation::Stack"
@@ -120,6 +117,9 @@ Resources:
         - "https://s3.amazonaws.com/${Bucket}/cfn-templates/graphQL/graphql-template.yaml"
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
+        UserPoolAwsRegion: !Ref "AWS::Region"
 
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
   CodeBuildOnlineGallery:
