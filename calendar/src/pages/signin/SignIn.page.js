@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Button, Segment, Message, Icon } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -17,16 +17,22 @@ export default function SignIn() {
   async function onSubmit({ username, password }) {
     console.log({ username, password });
     try {
-      await signIn({ username, password }); // UserNotConfirmedException
-    } catch (error) {
-      if (error.name == "UserNotConfirmedException") {
-        navigate("/auth/code");
-      }
-
-      if (error.name == "UserNotFoundException") {
+      await signIn({ username, password });
+      navigate("/");
+    } catch (err) {
+      if (err.name === "UserNotConfirmedException") {
+        navigate("/auth/code", { state: { requestNewCode: true } });
+      } else if (err.name === "UserNotFoundException") {
         addMessage({ message: "This user does not exist" });
+      } else if (err.name === "NotAuthorizedException") {
+        addMessage({ message: "Incorrect username or password." });
+      } else {
+        addMessage({
+          message: `Could not make sign in, error name "${err.name}"`,
+          ms: 0,
+        });
       }
-      console.log(error.name, { ...error });
+      console.log(err.name, { ...err });
     }
   }
 

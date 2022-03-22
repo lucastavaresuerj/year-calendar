@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const MessagesContext = createContext({
   messages: null,
@@ -9,27 +9,43 @@ export const MessagesContext = createContext({
 export default function MessagesProvider({ children }) {
   const [messages, setMessages] = useState({});
 
+  useEffect(() => {
+    return () => {
+      setMessages({});
+    };
+  }, []);
+
+  function defaultDismis(index) {
+    removeMessage({ index, dismiss: false });
+  }
+
   function addMessage({ message, onDismiss, ms = 3000 }) {
     const now = Date.now();
     const messageProps = {
       content: message,
-      onDismiss,
+      onDismiss: onDismiss || (() => defaultDismis(now)),
     };
 
     setMessages({ ...messages, [now]: messageProps });
-    setTimeout(() => {
-      removeMessage({ index: now });
-    }, ms);
+
+    if (ms !== 0) {
+      setTimeout(() => {
+        removeMessage({ index: now });
+      }, ms);
+    }
+
     return { [now]: message };
   }
 
-  function removeMessage({ index, removeAll = false }) {
+  function removeMessage({ index, dismiss = true, removeAll = false }) {
     if (removeAll) {
       setMessages({});
       return;
     }
+
     const { [index]: toBeRemoved, ...rest } = messages;
-    toBeRemoved?.onDismiss();
+
+    dismiss && toBeRemoved?.onDismiss();
     setMessages(rest);
   }
 

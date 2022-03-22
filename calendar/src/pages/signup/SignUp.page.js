@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Button, Segment, Message, Icon } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "contexts/User.context";
 import { MessagesContext } from "contexts/Messages.context";
@@ -9,16 +9,23 @@ import { MessageGroup } from "components";
 import { SignUpForm } from "components/auth";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const { signUp } = useContext(UserContext);
-  const { addMessages } = useContext(MessagesContext);
+  const { addMessage, messages } = useContext(MessagesContext);
 
   async function onSubmit({ username, password, email }) {
     console.log({ username, password, email });
     try {
       await signUp({ username, password, attributes: { email } });
-    } catch (error) {
-      addMessages(error.name);
-      console.log(error.name, error);
+      navigate("/auth/code", { state: { requestNewCode: false } });
+    } catch (err) {
+      addMessage({
+        message: `Could not make sign in, error name "${err.name}"`,
+        ms: 0,
+      });
+
+      console.log(err.name, err);
     }
   }
 
@@ -31,7 +38,7 @@ export default function SignUp() {
           </Button>
         </SignUpForm>
       </Segment>
-      <MessageGroup />
+      <MessageGroup messages={messages} />
       <Message attached="bottom" warning>
         <Icon name="help" />
         Already signed up?

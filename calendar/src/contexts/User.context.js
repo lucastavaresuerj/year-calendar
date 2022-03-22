@@ -7,6 +7,7 @@ export const UserContext = createContext({
   signOut: () => {},
   signUp: () => {},
   resendConfirmationCode: () => {},
+  confirmVrfCode: () => {},
 });
 
 export default function UserProvider({ children }) {
@@ -21,7 +22,7 @@ export default function UserProvider({ children }) {
       const user = await Auth.signIn(username, password);
       console.log(user);
     } catch (err) {
-      if (err.name == "UserNotConfirmedException") {
+      if (err.name === "UserNotConfirmedException") {
         setUser({ ...user, username, password });
       }
       console.log("error signing in", err);
@@ -53,18 +54,38 @@ export default function UserProvider({ children }) {
     }
   }
 
+  async function confirmVrfCode({ code, username = user.username }) {
+    console.log(code, username);
+    try {
+      await Auth.confirmSignUp(username, code);
+    } catch (err) {
+      console.log("error confirming sign up", err.name);
+      throw err;
+    }
+    const { password, ...userState } = user;
+    setUser(userState);
+  }
+
   async function signOut() {
     try {
       await Auth.signOut();
+      setUser(null);
     } catch (err) {
-      console.log("error signing out: ", err);
+      console.log("error signing out: ", err.name);
       throw err;
     }
   }
 
   return (
     <UserContext.Provider
-      value={{ user, signIn, signOut, signUp, resendConfirmationCode }}
+      value={{
+        user,
+        signIn,
+        signOut,
+        signUp,
+        resendConfirmationCode,
+        confirmVrfCode,
+      }}
     >
       {children}
     </UserContext.Provider>
