@@ -12,15 +12,15 @@ Resources:
     Properties:
       TableName: !Ref TableName
       AttributeDefinitions:
-        - AttributeName: "User"
-          AttributeType: "S"
         - AttributeName: "Index"
+          AttributeType: "S"
+        - AttributeName: "User"
           AttributeType: "S"
       KeySchema:
-        - AttributeName: "User"
-          KeyType: "RANGE"
         - AttributeName: "Index"
           KeyType: "HASH"
+        - AttributeName: "User"
+          KeyType: "RANGE"
       StreamSpecification:
         StreamViewType: NEW_IMAGE
       ProvisionedThroughput:
