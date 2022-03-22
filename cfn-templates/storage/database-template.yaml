@@ -4,7 +4,7 @@ Description: Create a DynamoDb Table
 Parameters:
   TableName:
     Type: String
-    Defautl: Calendar-Year
+    Default: Calendar-Year
 
 Resources:
   DynamoDBTable:
