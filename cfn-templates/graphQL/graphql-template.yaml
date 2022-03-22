@@ -22,11 +22,11 @@ Resources:
 
 Outputs:
   GraphQLName:
-    Value: !GetAtt GraphQL.ApiId
+    Value: !GetAtt GraphQLApi.ApiId
     Description: The GraphQL name
   GraphQLArn:
-    Value: !GetAtt GraphQL.Arn
+    Value: !GetAtt GraphQLApi.Arn
     Description: The Amazon Resource Name (ARN) of the API key
   GraphQLUrl:
-    Value: !GetAtt GraphQL.GraphQLUrl
+    Value: !GetAtt GraphQLApi.GraphQLUrl
     Description: The Endpoint URL of the GraphQL API.
