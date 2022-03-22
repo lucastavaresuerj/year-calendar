@@ -21,7 +21,8 @@ Resources:
           KeyType: "RANGE"
         - AttributeName: "Index"
           KeyType: "HASH"
-      StreamSpecification: NEW_IMAGE
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
 
 Outputs:
   DBName:
