@@ -25,7 +25,7 @@ Resources:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      DefinitionS3Location: !Sub "https://${S3BucketDeploy}.s3.amazonaws.com/cfn-templates/graphQL/schema.graphql"
+      DefinitionS3Location: !Sub "s3://${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
 
 Outputs:
   GraphQLName:
@@ -38,5 +38,5 @@ Outputs:
     Value: !GetAtt GraphQLApi.GraphQLUrl
     Description: The Endpoint URL of the GraphQL API.
   ShemaURL:
-    Value: !Sub "https://${S3BucketDeploy}.s3.amazonaws.com/cfn-templates/graphQL/schema.graphql"
+    Value: !Sub "s3://${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
     Description: Test to verify if it is the correct url
