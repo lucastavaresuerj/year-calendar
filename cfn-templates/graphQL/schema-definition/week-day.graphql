@@ -1,0 +1,7 @@
+type WeekDay {
+  backgroundColor: String
+  textColor: String
+  textStyle: String
+  fontWeight: String
+  size: String
+}

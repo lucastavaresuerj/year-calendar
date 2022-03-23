@@ -1,0 +1,25 @@
+enum NumberSide {
+  LEFT
+  RIGHT
+}
+
+type NumberHeader {
+  showNumber: Boolean
+  side: NumberSide
+}
+
+type MonthName {
+  aling: String
+  size: String
+  style: String
+  fontWeight: String
+  textColor: String
+}
+
+type Header {
+  rounded: Boolean
+  backgroundColor: String
+  space: String
+  number: NumberHeader
+  monthName: MonthName
+}

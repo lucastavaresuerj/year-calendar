@@ -1,0 +1,6 @@
+type MonthDay {
+  date: Date!
+  holidays: [Holiday]
+  color: String
+  observation: String
+}

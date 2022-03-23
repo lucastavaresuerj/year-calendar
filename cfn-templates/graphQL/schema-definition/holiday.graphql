@@ -1,0 +1,31 @@
+type ConfigHoliday {
+  textColor: String
+  backgroundColor: String
+}
+
+type Holiday {
+  date: Date
+  name: String
+  description: String
+  config: ConfigHoliday
+}
+
+input InpHoliday {
+  date: Date
+  name: String
+}
+
+input InpAddHoliday {
+  date: Date!
+  name: String!
+  description: String
+  config: ConfigHoliday
+}
+
+type Query {
+  holiday(holiday: InpHoliday): [Holiday!]
+}
+
+type Mutation {
+  addHoliday(holiday: InpAddHoliday): Holiday
+}

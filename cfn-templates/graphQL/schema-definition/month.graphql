@@ -1,0 +1,11 @@
+type Month {
+  header: Header
+  weekDays: [WeekDay!]
+  monthDays: [MonthDay!]
+}
+
+type MonthGlobal {
+  header: Header
+  weekDays: WeekDay
+  monthDays: MonthDay
+}

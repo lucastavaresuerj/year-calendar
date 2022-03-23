@@ -1,0 +1,8 @@
+type Calendar {
+  name: String
+  index: String
+  user: String
+  year: Year
+  DefaultMonth: MonthGlobal
+  months: [Month!]
+}
