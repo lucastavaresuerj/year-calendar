@@ -102,13 +102,13 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
 
-  # DynamoDbTable:
-  #   Type: "AWS::CloudFormation::Stack"
-  #   Properties:
-  #     TemplateURL: !Sub
-  #       - "https://s3.amazonaws.com/${Bucket}/cfn-templates/storage/database-template.yaml"
-  #       - Bucket:
-  #           Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+  DynamoDbTable:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/storage/database-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
 
   GraphQLApi:
     Type: "AWS::CloudFormation::Stack"
