@@ -21,11 +21,11 @@ Resources:
         UserPoolId: !Ref UserPoolId
         AwsRegion: !Ref UserPoolAwsRegion
         DefaultAction: ALLOW
-  # Schema:
-  #   Type: AWS::AppSync::GraphQLSchema
-  #   Properties:
-  #     ApiId: !GetAtt GraphQLApi.ApiId
-  #     DefinitionS3Location: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
+  Schema:
+    Type: AWS::AppSync::GraphQLSchema
+    Properties:
+      ApiId: !GetAtt GraphQLApi.ApiId
+      DefinitionS3Location: !Sub "https://${S3BucketDeploy}.s3.amazonaws.com/cfn-templates/graphQL/schema.graphql"
 
 Outputs:
   GraphQLName:
@@ -38,5 +38,5 @@ Outputs:
     Value: !GetAtt GraphQLApi.GraphQLUrl
     Description: The Endpoint URL of the GraphQL API.
   ShemaURL:
-    Value: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
+    Value: !Sub "https://${S3BucketDeploy}.s3.amazonaws.com/cfn-templates/graphQL/schema.graphql"
     Description: Test to verify if it is the correct url
