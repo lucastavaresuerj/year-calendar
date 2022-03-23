@@ -24,7 +24,7 @@ Resources:
   Schema:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
-      ApiId: !Ref GraphQLApi
+      ApiId: !GetAtt GraphQLApi.ApiId
       DefinitionS3Location: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
 
 Outputs:
