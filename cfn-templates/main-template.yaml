@@ -118,6 +118,8 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
+        S3BucketDeploy:
+          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
         UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
 
