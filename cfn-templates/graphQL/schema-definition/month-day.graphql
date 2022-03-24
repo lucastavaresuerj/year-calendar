@@ -1,5 +1,5 @@
 type MonthDay {
-  date: Date!
+  date: AWSDate!
   holidays: [Holiday!]
   color: String
   observation: String

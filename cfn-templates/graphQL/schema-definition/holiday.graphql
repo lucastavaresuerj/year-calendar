@@ -4,19 +4,19 @@ type ConfigHoliday {
 }
 
 type Holiday {
-  date: Date
+  date: AWSDate
   name: String
   description: String
   config: ConfigHoliday
 }
 
 input InpHoliday {
-  date: Date
+  date: AWSDate
   name: String
 }
 
 input InpAddHoliday {
-  date: Date!
+  date: AWSDate!
   name: String!
   description: String
   config: ConfigHoliday

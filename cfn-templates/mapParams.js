@@ -3,7 +3,7 @@
   if (param.ParameterKey === "GraphQLSchemaFileName") {
     return {
       ParameterKey: "GraphQLSchemaFileName",
-      ParameterValue: `schema.graphql-${process.env["CODEBUILD_BUILD_NUMBER"]}`,
+      ParameterValue: `schema-${process.env["CODEBUILD_BUILD_NUMBER"]}.graphql`,
     };
   }
   return param;  
