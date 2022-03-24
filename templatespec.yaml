@@ -16,7 +16,6 @@ phases:
       - npm i -g fx
 
   pre_build:
-    on-failure: ABORT
     commands:
       - echo "merging graphql files"
       - |
