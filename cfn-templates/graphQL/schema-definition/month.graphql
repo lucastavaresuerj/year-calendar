@@ -6,6 +6,6 @@ type Month {
 
 type MonthGlobal {
   header: Header
-  weekDays: WeekDay
-  monthDays: MonthDay
+  weekDay: WeekDay
+  monthDay: MonthDay
 }
