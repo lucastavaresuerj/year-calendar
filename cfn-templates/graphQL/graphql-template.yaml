@@ -9,7 +9,7 @@ Parameters:
     Type: String
   UserPoolAwsRegion:
     Type: String
-  S3BucketDeploy:
+  GraphQLSchemaFileS3Location:
     Type: String
 
 Resources:
@@ -27,7 +27,7 @@ Resources:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      DefinitionS3Location: !Sub "s3://${S3BucketDeploy}/cfn-templates/graphQL/schema.graphql"
+      DefinitionS3Location: !Ref GraphQLSchemaFileS3Location
 
 Outputs:
   GraphQLName:

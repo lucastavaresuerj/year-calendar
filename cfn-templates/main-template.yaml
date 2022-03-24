@@ -13,6 +13,9 @@ Parameters:
   S3SavesStackName:
     Type: String
     Default: saves-bucket-calendar-year
+  GraphQLSchemaFileName:
+    Type: String
+    Default: schema.graphql
 
 Outputs:
   Region:
@@ -118,8 +121,10 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
-        S3BucketDeploy:
-          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        GraphQLSchemaFileS3Location: !Sub
+          - "s3://${Bucket}/cfn-templates/graphQL/${GraphQLSchemaFileName}"
+          - Bucket:
+              Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
         UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
 
