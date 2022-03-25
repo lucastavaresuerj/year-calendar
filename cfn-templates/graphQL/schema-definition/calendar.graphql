@@ -6,3 +6,7 @@ type Calendar {
   DefaultMonth: MonthGlobal
   months: [Month!]
 }
+
+type Query {
+  calendar(id: Int): Calendar
+}
