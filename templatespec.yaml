@@ -16,7 +16,6 @@ phases:
       - npm i -g fx
 
   pre_build:
-    on-failure: CONTINUE
     commands:
       - echo "merging graphql files"
       - |
@@ -32,19 +31,16 @@ phases:
           ./${GRAPHQL_FOLDER_PATH}/ \
           --exclude "*" \
           --include "schema-*.graphql"
-      - diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql
-      # "$?" variable that store the exit code of the last command
-      - echo "changing parameter GraphQLSchemaFileName"
       - |
-        [ $? -gt 0 ] && { \
-          echo "need to update" \
-          diff schema-*.graphql \
+        diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql && { \
+          echo "GraphQL schemas are equals, there is no need to update" \
+          rm ./${GRAPHQL_FOLDER_PATH}/schema-definition \
+        } || { \
+          echo "Need to update" \
+          echo "Changing parameter GraphQLSchemaFileName"
           cat cfn-templates/parameters.json | \
             fx ".map($(cat cfn-templates/mapParams.js))" \
             > cfn-templates/parameters.json \
-        } || { \
-          echo "GraphQL schemas are equals, there is no need to update" \
-          rm ./${GRAPHQL_FOLDER_PATH}/schema-definition \
         }
 
   build:
