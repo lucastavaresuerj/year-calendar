@@ -23,16 +23,24 @@ phases:
         -s "./${GRAPHQL_FOLDER_PATH}/schema-definition/**/*.graphql" \
         -o "./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql"
       - rm ./${GRAPHQL_FOLDER_PATH}/schema-definition -r
-      - echo "changing parameter GraphQLSchemaFileName"
-      - diff schema-*.graphql
+      # Will compare new schema builded with the schema at s3
+      - echo "comparing with the last schema from s3"
+      - |
+        aws s3 sync \
+          s3://${S3_BUCKET_NAME}/${GRAPHQL_FOLDER_PATH}/ \
+          ./${GRAPHQL_FOLDER_PATH}/ \
+          --exclude "*" \
+          --include "schema-*.graphql"
+      - diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql
       # "$?" variable that store the exit code of the last command
+      - echo "changing parameter GraphQLSchemaFileName"
       - |
         [ $? -qt 0 ] && { \
           echo "need to update" \
           diff schema-*.graphql \
           cat cfn-templates/parameters.json | \
-          fx ".map($(cat cfn-templates/mapParams.js))" \
-          > cfn-templates/parameters.json \
+            fx ".map($(cat cfn-templates/mapParams.js))" \
+            > cfn-templates/parameters.json \
         } || { \
           echo "GraphQL schemas are equals, there is no need to update" \
           rm ./${GRAPHQL_FOLDER_PATH}/schema-definition \
