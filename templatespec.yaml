@@ -16,6 +16,7 @@ phases:
       - npm i -g fx
 
   pre_build:
+    on-failure: CONTINUE
     commands:
       - ./spec-scripts/template/merge-graphql-files.sh
       - ./spec-scripts/template/compare-and-change-params.sh
