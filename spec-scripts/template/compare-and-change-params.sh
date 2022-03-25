@@ -10,10 +10,16 @@ aws s3 sync \
 
 { # Try
   diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql
+} && { # Do if has no error at try
   echo "GraphQL schemas are equals, there is no need to update"
   rm ./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql
 } || { # Catch
   echo "Need to update"
+  aws s3 rm \
+    s3://saves-bucket-calendar-year-savesbucket-nx3ap2uftsmb/cfn-templates/graphQL/ \
+    --exclude "*" \
+    --include "schema-*.graphql" \
+    --recursive
   echo "Changing parameter GraphQLSchemaFileName"
   cat cfn-templates/parameters.json | \
     fx ".map($(cat cfn-templates/mapParams.js))" \

@@ -13,6 +13,6 @@
   },
   {
     "ParameterKey": "GraphQLSchemaFileName",
-    "UsePreviousValue": "schema.graphql"
+    "ParameterValue": "schema-undefined.graphql"
   }
 ]
