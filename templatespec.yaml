@@ -17,31 +17,8 @@ phases:
 
   pre_build:
     commands:
-      - echo "merging graphql files"
-      - |
-        graphql-schema-utilities \
-        -s "./${GRAPHQL_FOLDER_PATH}/schema-definition/**/*.graphql" \
-        -o "./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql"
-      - rm ./${GRAPHQL_FOLDER_PATH}/schema-definition -r
-      # Will compare new schema builded with the schema at s3
-      - echo "comparing with the last schema from s3"
-      - |
-        aws s3 sync \
-          s3://${S3_BUCKET_NAME}/${GRAPHQL_FOLDER_PATH}/ \
-          ./${GRAPHQL_FOLDER_PATH}/ \
-          --exclude "*" \
-          --include "schema-*.graphql"
-      - |
-        diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql && { \
-          echo "GraphQL schemas are equals, there is no need to update" \
-          rm ./${GRAPHQL_FOLDER_PATH}/schema-definition \
-        } || { \
-          echo "Need to update" \
-          echo "Changing parameter GraphQLSchemaFileName" \
-          cat cfn-templates/parameters.json | \
-            fx ".map($(cat cfn-templates/mapParams.js))" \
-            > cfn-templates/parameters.json \
-        }
+      - ./spec-scripts/template/merge-graphql-files.sh
+      - ./spec-scripts/template/compare-and-change-params.sh
 
   build:
     commands:
