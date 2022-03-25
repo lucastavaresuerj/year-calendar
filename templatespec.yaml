@@ -16,6 +16,7 @@ phases:
       - npm i -g fx
 
   pre_build:
+    on-failure: CONTINUE
     commands:
       - echo "merging graphql files"
       - |
@@ -35,7 +36,7 @@ phases:
       # "$?" variable that store the exit code of the last command
       - echo "changing parameter GraphQLSchemaFileName"
       - |
-        [ $? -qt 0 ] && { \
+        [ $? -gt 0 ] && { \
           echo "need to update" \
           diff schema-*.graphql \
           cat cfn-templates/parameters.json | \
