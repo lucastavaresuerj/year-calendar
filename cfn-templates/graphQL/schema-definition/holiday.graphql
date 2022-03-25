@@ -15,11 +15,16 @@ input InpHoliday {
   name: String
 }
 
+input InpConfigHoliday {
+  textColor: String
+  backgroundColor: String
+}
+
 input InpAddHoliday {
   date: AWSDate!
   name: String!
   description: String
-  config: ConfigHoliday
+  config: InpConfigHoliday
 }
 
 type Query {
