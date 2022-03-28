@@ -4,7 +4,7 @@ type Calendar {
   user: String
   year: Int
   colNumber: Int
-  title: 
+  title: Title
   defaultMonth: MonthGlobal
   months: [Month!]
 }
