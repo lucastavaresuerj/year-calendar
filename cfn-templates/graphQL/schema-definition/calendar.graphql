@@ -7,6 +7,6 @@ type Calendar {
   months: [Month!]
 }
 
-type Query {
+extend type Query {
   calendar(id: Int): Calendar
 }

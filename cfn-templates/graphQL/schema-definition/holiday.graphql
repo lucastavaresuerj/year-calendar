@@ -27,7 +27,7 @@ input InpAddHoliday {
   config: InpConfigHoliday
 }
 
-type Query {
+extend type Query {
   holiday(holiday: InpHoliday): [Holiday!]
 }
 

@@ -10,7 +10,7 @@
     --exclude "*/" \
     --include "schema-*.graphql" | \
     grep "download"
-} || { #Catch
+} || { # Catch
   echo "There is no file with name like 'schema-*.graphql'"
   echo "Ending script"
   exit 1
@@ -18,9 +18,9 @@
 
 { # Try
 	diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql
-	ERRO=$?
+	ERRO_CODE=$?
 } && { # Catch with switch/case and exit code
-	case $ERRO in
+	case $ERRO_CODE in
 	0) { 
 		echo "GraphQL schemas are equals, there is no need to update"
     rm ./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql
