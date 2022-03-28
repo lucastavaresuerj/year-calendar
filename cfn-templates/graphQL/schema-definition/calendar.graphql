@@ -2,8 +2,10 @@ type Calendar {
   name: String
   index: String
   user: String
-  year: Year
-  DefaultMonth: MonthGlobal
+  year: Int
+  colNumber: Int
+  title: 
+  defaultMonth: MonthGlobal
   months: [Month!]
 }
 

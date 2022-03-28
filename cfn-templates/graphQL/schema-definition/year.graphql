@@ -1,3 +1,0 @@
-type Year {
-  col: Int
-}
