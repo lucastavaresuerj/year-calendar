@@ -27,18 +27,16 @@
 	};;
 	1) { 
 		echo "Need to update"
-    aws s3 rm \
-      s3://${S3_BUCKET_NAME}/${GRAPHQL_FOLDER_PATH}/ \
-      --exclude "*" \
-      --include "schema-*.graphql" \
-      --recursive
+    echo "Deleting old schema"
+    find ./${GRAPHQL_FOLDER_PATH}/ -name "*.graphql" ! -name "*${CODEBUILD_BUILD_NUMBER}.graphql" -delete
     echo "Changing parameter GraphQLSchemaFileName"
     cat cfn-templates/parameters.json | \
       fx ".map($(cat cfn-templates/mapParams.js))" \
       > cfn-templates/parameters.json
 	};;
 	2) { 
-		echo "Missing diff params, some file was not found"
+		echo "Diff params error,\n Listing files like 'schema-.*\.graphql'"
+    ls ./${GRAPHQL_FOLDER_PATH} | grep 'schema-.*\.graphql'
 	};;
 	*) {
 		echo "Something went wrong with exit code: $?"
