@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Table } from "semantic-ui-react";
 
-import { YearContext } from "contexts/Year.context";
+import { CalendarContext } from "contexts/Calendar.context";
 import { MonthContext } from "contexts/Month.context";
 
 const config = {
@@ -12,10 +12,12 @@ const config = {
 };
 
 export default function MonthDays() {
-  const { yearNumber } = useContext(YearContext);
+  const {
+    data: { year },
+  } = useContext(CalendarContext);
   const { monthNumber } = useContext(MonthContext);
 
-  const days = makeDays(yearNumber, monthNumber);
+  const days = makeDays(year, monthNumber);
 
   function formatDay(day = new Date(), type) {
     return { day: day.getDate(), type };

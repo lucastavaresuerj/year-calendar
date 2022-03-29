@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Navigate } from "react-router-dom";
+import CalendarProvider from "contexts/Calendar.context";
+
+import { CalendarCard } from "components";
 
 export default function MyCalendars() {
-  return <Navigate to="/" />;
+  const [calendars, setCalendars] = useState([]);
+
+  return (
+    <>
+      {calendars.map((calendar) => (
+        <CalendarProvider {...calendar}>
+          <CalendarCard />
+        </CalendarProvider>
+      ))}
+    </>
+  );
 }

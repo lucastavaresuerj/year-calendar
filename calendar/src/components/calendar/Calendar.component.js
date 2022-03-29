@@ -1,23 +1,22 @@
 import React, { useContext } from "react";
 import { Grid, Header } from "semantic-ui-react";
 
-import { YearContext } from "contexts/Year.context";
+import { CalendarContext } from "contexts/Calendar.context";
 import MonthProvider from "contexts/Month.context";
 
 import Month from "components/month/Month.component";
 
-export default function Year({}) {
+export default function Calendar({}) {
   const {
-    yearNumber,
-    config: { year },
-  } = useContext(YearContext);
+    data: { year, colNumber },
+  } = useContext(CalendarContext);
 
   function makeMonths() {
     const months = [];
 
     for (let month = 0; month < 12; month++) {
       months.push(
-        <MonthProvider key={`y-${yearNumber}-m-${month}`} monthNumber={month}>
+        <MonthProvider key={`y-${year}-m-${month}`} monthNumber={month}>
           <Month />
         </MonthProvider>
       );
@@ -28,9 +27,9 @@ export default function Year({}) {
   return (
     <>
       <Header size="huge" textAlign="center">
-        {yearNumber}
+        {year}
       </Header>
-      <Grid container columns={year.col} className="year">
+      <Grid container columns={colNumber} className="year">
         {makeMonths()}
       </Grid>
     </>

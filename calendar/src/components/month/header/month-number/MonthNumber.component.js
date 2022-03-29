@@ -1,16 +1,26 @@
 import React, { useContext } from "react";
 
 import { MonthContext } from "contexts/Month.context";
-import { YearContext } from "contexts/Year.context";
+import { CalendarContext } from "contexts/Calendar.context";
 
 export default function MonthNumber() {
   const { monthNumber } = useContext(MonthContext);
   const {
-    config: { number },
-  } = useContext(YearContext);
+    data: {
+      defaultMonth: {
+        header: { number: defaultNumber },
+      },
+      months,
+    },
+  } = useContext(CalendarContext);
+
+  const {
+    header: { number: particularNumber },
+  } = months[monthNumber];
+  const numberConfig = { ...defaultNumber, ...particularNumber };
 
   const style = {
-    float: number.side,
+    float: numberConfig.side,
   };
 
   return (

@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Table } from "semantic-ui-react";
 
-import { YearContext } from "contexts/Year.context";
+import { CalendarContext } from "contexts/Calendar.context";
+import { MonthContext } from "contexts/Month.context";
 
 import MonthName from "./month-name/MonthName.component";
 import MonthNumber from "./month-number/MonthNumber.component";
@@ -9,13 +10,20 @@ import MonthNumber from "./month-number/MonthNumber.component";
 import "./MonthHeader.scss";
 
 export default function MonthHeader() {
+  const { monthNumber } = useContext(MonthContext);
   const {
-    config: { header },
-  } = useContext(YearContext);
+    data: {
+      defaultMonth: { header: globalHeader },
+      months,
+    },
+  } = useContext(CalendarContext);
+
+  const particularHeader = months[monthNumber];
+  const headerConfig = { ...globalHeader, ...particularHeader };
 
   const headerStyle = {
-    backgroundColor: header.background,
-    padding: header.space,
+    backgroundColor: headerConfig.background,
+    padding: headerConfig.space,
   };
 
   return (
@@ -23,8 +31,8 @@ export default function MonthHeader() {
       <Table.Row>
         <Table.HeaderCell
           className={`month-header ${
-            header.showNumber ? "with-number" : "without-number"
-          } ${!header.rounded && "not-rounded"}`}
+            headerConfig.showNumber ? "with-number" : "without-number"
+          } ${!headerConfig.rounded && "not-rounded"}`}
           colSpan="7"
           style={headerStyle}
         >
