@@ -1,6 +1,10 @@
 type MonthDay {
   date: AWSDate!
   holidays: [Holiday!]
-  color: String
+  config: MonthDayConfig
   observation: String
+}
+
+type MonthDayConfig {
+  color: String
 }

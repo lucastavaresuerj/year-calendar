@@ -7,5 +7,7 @@ type Month {
 type MonthGlobal {
   header: Header
   weekDay: WeekDay
-  monthDay: MonthDay
+  monthDay: {
+    config: MonthDayConfig
+  }
 }

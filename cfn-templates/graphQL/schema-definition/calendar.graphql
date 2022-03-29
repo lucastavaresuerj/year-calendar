@@ -9,6 +9,16 @@ type Calendar {
   months: [Month!]
 }
 
+type CalendarPreview {
+  name: String
+  index: String
+  user: String
+  year: Int
+  title: Title
+  months: [Month!] # Should return only the first month
+}
+
 extend type Query {
   calendar(id: Int): Calendar
+  cardPreview: [CalendarPreview!]
 }
