@@ -4,10 +4,12 @@ type Month {
   monthDays: [MonthDay!]
 }
 
+type _MonthDayConfig {
+  config: MonthDayConfig
+}
+
 type MonthGlobal {
   header: Header
   weekDay: WeekDay
-  monthDay: {
-    config: MonthDayConfig
-  }
+  monthDay: _MonthDayConfig
 }
