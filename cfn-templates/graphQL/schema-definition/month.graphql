@@ -4,20 +4,20 @@ type Month {
   monthDays: [MonthDay!]
 }
 
-input InpMonth {
-  header: InpHeader
-  weekDays: [InpWeekDay!]
-  monthDays: [InpMonthDay!]
-}
-
 type MonthGlobal {
   header: Header
   weekDay: WeekDay
   monthDay: _MonthDayConfig
 }
 
+input InpMonth {
+  header: InpHeader
+  weekDays: [InpWeekDay!]
+  monthDays: [InpMonthDay!]
+}
+
 input InpMonthGlobal {
-  header: Header
-  weekDay: WeekDay
-  monthDay: _MonthDayConfig
+  header: InpHeader
+  weekDay: InpWeekDay
+  monthDay: _InpMonthDayConfig
 }

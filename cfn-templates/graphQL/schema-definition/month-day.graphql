@@ -15,7 +15,7 @@ type _MonthDayConfig {
 
 input InpMonthDay {
   date: AWSDate!
-  holidays: [Holiday!]
+  holidays: [InpHoliday!]
   config: InpMonthDayConfig
   observation: String
 }
