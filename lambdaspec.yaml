@@ -1,0 +1,25 @@
+version: 0.2
+
+env:
+  variables:
+    STACK_NAME: ""
+    S3_BUCKET_DEPLOY: ""
+    GRAPHQL_API_ID: ""
+
+phases:
+  install:
+    run-as: root
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install aws-sam-cli
+      - sam --version
+
+  build:
+    run-as: root
+    commands:
+      - |
+        STACK_NAME=${STACK_NAME} \
+        S3_BUCKET_DEPLOY=${S3_BUCKET_DEPLOY} \
+        GRAPHQL_API_ID=${GRAPHQL_API_ID} \
+        ./spec-scripts/lambda/deploy-lambdas.sh

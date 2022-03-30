@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambdaAsDataSource
+
+  Sample SAM Template for test-sam
+
+Parameters:
+  GraphqlApiId:
+    Type: String
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  LambdaAsDataSource:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: lambdaAsDataSource/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Architectures:
+        - x86_64
+
+  AppSyncRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: appsync.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: allow-access-to-lambda-from-appsync
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: lambda:invokeFunction
+                Resource:
+                  - !GetAtt LambdaAsDataSource.Arn
+                  - !Sub
+                    - "${LambdaArn}:*"
+                    - LambdaArn: !GetAtt LambdaAsDataSource.Arn
+
+  AppSyncDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: handler
+      Type: AWS_LAMBDA
+      LambdaConfig:
+        LambdaFunctionArn: !GetAtt LambdaAsDataSource.Arn
+      ServiceRoleArn: !GetAtt AppSyncRole.Arn
+
+  AppSyncResolverPeople:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      TypeName: Query
+      FieldName: testLambda
+      DataSourceName: !GetAtt AppSyncDataSource.Name
+      RequestMappingTemplate: |
+        '{ 
+          "version" : "2017-02-28",
+          "operation": "Invoke",
+          "payload": { 
+            "context": $utils.toJson($context) 
+          }
+        }'
+      ResponseMappingTemplate: $util.toJson($context.result)
+
+Outputs:
+  DeleteResizedFunctionIamRole:
+    Description: "Implicit IAM Role created for DeleteResized function"
+    Value: !GetAtt LambdaAsDataSourceRole.Arn
+  DeleteResizedFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt LambdaAsDataSource.Arn
+  AppSyncRole:
+    Description: Service Role arn of appsync
