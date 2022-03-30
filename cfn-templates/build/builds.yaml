@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Using code build to deploy an angular project into S3
+Parameters:
+  GitHubOwner:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: lucastavaresuerj
+  GitHubRepository:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: year-calendar
+  GitHubBranch:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+    Default: main
+  CodeBuildEnvironmentImage:
+    Type: String
+    Default: "aws/codebuild/standard:4.0"
+
+  MainStackName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  MainStackID:
+    Type: String
+  S3BucketDeploy:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  S3BucketWebSite:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  IdentityPoolId:
+    Type: String
+  CognitoRegion:
+    Type: String
+  UserPoolId:
+    Type: String
+  UserPoolWebClientId:
+    Type: String
+  GraphqlApiId:
+    Type: String
+
+Resources:
+  CodeBuildTemplate:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/build/templatebuild-template.yaml"
+      Parameters:
+        GitHubOwner: !Ref GitHubOwner
+        GitHubRepository: !Ref GitHubRepository
+        GitHubBranch: !Ref GitHubBranch
+        CodeBuildEnvironmentImage: !Ref CodeBuildEnvironmentImage
+
+        S3BucketDeploy: !Ref S3BucketDeploy
+        MainStackName: !Ref MainStackName
+        MainStackID: !Ref MainStackID
+
+  CodeBuildFront:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/build/codebuild-template.yaml"
+      Parameters:
+        GitHubOwner: !Ref GitHubOwner
+        GitHubRepository: !Ref GitHubRepository
+        GitHubBranch: !Ref GitHubBranch
+        CodeBuildEnvironmentImage: !Ref CodeBuildEnvironmentImage
+
+        S3BucketWebSite: !Ref S3BucketWebSite
+        IdentityPoolId: !Ref IdentityPoolId
+        CognitoRegion: !Ref CognitoRegion
+        UserPoolId: !Ref UserPoolId
+        UserPoolWebClientId: !Ref UserPoolWebClientId
+
+  CodeBuildLambda:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/build/lambdabuild-template.yaml"
+      Parameters:
+        GitHubOwner: !Ref GitHubOwner
+        GitHubRepository: !Ref GitHubRepository
+        GitHubBranch: !Ref GitHubBranch
+        CodeBuildEnvironmentImage: !Ref CodeBuildEnvironmentImage
+
+        S3BucketDeploy: !Ref S3BucketDeploy
+        MainStackName: !Ref MainStackName
+        GraphqlApiId: !Ref GraphqlApiId

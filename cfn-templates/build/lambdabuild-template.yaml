@@ -1,14 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Using code build to deploy the templates to aws cloudformation
 Parameters:
-  S3BucketDeploy:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
-  MainStackName:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
-  GraphqlApiId:
-    Type: String
   GitHubOwner:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -16,7 +8,6 @@ Parameters:
   GitHubRepository:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: gallery-aws
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -24,6 +15,15 @@ Parameters:
   CodeBuildEnvironmentImage:
     Type: String
     Default: "aws/codebuild/standard:4.0"
+
+  MainStackName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  S3BucketDeploy:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
+  GraphqlApiId:
+    Type: String
 
 Resources:
   DeployBucketPolicy:

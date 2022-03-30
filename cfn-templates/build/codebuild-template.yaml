@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Using code build to deploy an angular project into S3
+Description: Using code build to deploy an react project into S3
 Parameters:
-  S3BucketWebSite:
-    Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
   GitHubOwner:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -11,7 +8,6 @@ Parameters:
   GitHubRepository:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
-    Default: year-calendar
   GitHubBranch:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
@@ -19,6 +15,10 @@ Parameters:
   CodeBuildEnvironmentImage:
     Type: String
     Default: "aws/codebuild/standard:4.0"
+
+  S3BucketWebSite:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
   IdentityPoolId:
     Type: String
   CognitoRegion:

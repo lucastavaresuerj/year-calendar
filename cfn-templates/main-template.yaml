@@ -43,19 +43,6 @@ Outputs:
     Value: !Ref UnauthRoleName
 
 Resources:
-  CodeBuildDeployTemplate:
-    Type: "AWS::CloudFormation::Stack"
-    Properties:
-      TemplateURL: !Sub
-        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/templatebuild-template.yaml"
-        - Bucket:
-            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-      Parameters:
-        S3BucketDeploy:
-          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-        MainStackName: !Ref "AWS::StackName"
-        MainStackID: !Ref "AWS::StackId"
-
   Auth:
     Type: "AWS::CloudFormation::Stack"
     Properties:
@@ -105,20 +92,6 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
 
-  CodeBuildFront:
-    Type: "AWS::CloudFormation::Stack"
-    Properties:
-      TemplateURL: !Sub
-        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/codebuild-template.yaml"
-        - Bucket:
-            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-      Parameters:
-        S3BucketWebSite: !GetAtt FrontStorage.Outputs.S3BucketName
-        IdentityPoolId: !GetAtt Auth.Outputs.IdentityPoolId
-        CognitoRegion: !GetAtt Auth.Outputs.Region
-        UserPoolId: !GetAtt Auth.Outputs.UserPoolId
-        UserPoolWebClientId: !GetAtt Auth.Outputs.AppClientIDWeb
-
   DynamoDbTable:
     Type: "AWS::CloudFormation::Stack"
     Properties:
@@ -142,15 +115,21 @@ Resources:
         UserPoolId: !GetAtt Auth.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
 
-  CodeBuildDeployLambda:
+  CodeBuildBuildsStacks:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub
-        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/lambdabuild-template.yaml"
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/builds.yaml"
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
         S3BucketDeploy:
           Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
         MainStackName: !Ref "AWS::StackName"
+        MainStackID: !Ref "AWS::StackId"
+        S3BucketWebSite: !GetAtt FrontStorage.Outputs.S3BucketName
+        IdentityPoolId: !GetAtt Auth.Outputs.IdentityPoolId
+        CognitoRegion: !GetAtt Auth.Outputs.Region
+        UserPoolId: !GetAtt Auth.Outputs.UserPoolId
+        UserPoolWebClientId: !GetAtt Auth.Outputs.AppClientIDWeb
         GraphqlApiId: !GetAtt GraphQLApi.Outputs.GraphQLApiId
