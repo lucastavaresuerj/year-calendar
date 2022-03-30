@@ -10,3 +10,16 @@ type TitleConfig {
   fontWeight: String
   textColor: String
 }
+
+input InpTitle {
+  name: String!
+  config: InpTitleConfig
+}
+
+input InpTitleConfig {
+  aling: String
+  size: String
+  style: String
+  fontWeight: String
+  textColor: String
+}

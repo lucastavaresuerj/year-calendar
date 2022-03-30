@@ -5,3 +5,11 @@ type WeekDay {
   fontWeight: String
   size: String
 }
+
+input InpWeekDay {
+  backgroundColor: String
+  textColor: String
+  textStyle: String
+  fontWeight: String
+  size: String
+}

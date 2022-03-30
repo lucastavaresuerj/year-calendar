@@ -1,0 +1,7 @@
+type TestLambda {
+  result: String
+}
+
+extend type Query {
+  testLambda: TestLambda
+}

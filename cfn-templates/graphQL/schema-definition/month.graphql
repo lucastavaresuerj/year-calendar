@@ -4,11 +4,19 @@ type Month {
   monthDays: [MonthDay!]
 }
 
-type _MonthDayConfig {
-  config: MonthDayConfig
+input InpMonth {
+  header: InpHeader
+  weekDays: [InpWeekDay!]
+  monthDays: [InpMonthDay!]
 }
 
 type MonthGlobal {
+  header: Header
+  weekDay: WeekDay
+  monthDay: _MonthDayConfig
+}
+
+input InpMonthGlobal {
   header: Header
   weekDay: WeekDay
   monthDay: _MonthDayConfig

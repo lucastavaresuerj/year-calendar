@@ -8,3 +8,22 @@ type MonthDay {
 type MonthDayConfig {
   color: String
 }
+
+type _MonthDayConfig {
+  config: MonthDayConfig
+}
+
+input InpMonthDay {
+  date: AWSDate!
+  holidays: [Holiday!]
+  config: InpMonthDayConfig
+  observation: String
+}
+
+input InpMonthDayConfig {
+  color: String
+}
+
+input _InpMonthDayConfig {
+  config: InpMonthDayConfig
+}

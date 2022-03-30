@@ -30,7 +30,7 @@ Resources:
       DefinitionS3Location: !Ref GraphQLSchemaFileS3Location
 
 Outputs:
-  GraphQLName:
+  GraphQLApiId:
     Value: !GetAtt GraphQLApi.ApiId
     Description: The GraphQL name
   GraphQLArn:
