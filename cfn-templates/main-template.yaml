@@ -43,7 +43,20 @@ Outputs:
     Value: !Ref UnauthRoleName
 
 Resources:
-  AuthOnlineGallery:
+  CodeBuildDeployTemplate:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/templatebuild-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        S3BucketDeploy:
+          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        MainStackName: !Ref "AWS::StackName"
+        MainStackID: !Ref "AWS::StackId"
+
+  Auth:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub
@@ -84,26 +97,27 @@ Resources:
         DependsOn: ""
         Env: dev
 
-  CodeBuildDeployTemplate:
-    Type: "AWS::CloudFormation::Stack"
-    Properties:
-      TemplateURL: !Sub
-        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/templatebuild-template.yaml"
-        - Bucket:
-            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-      Parameters:
-        S3BucketDeploy:
-          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-        MainStackName: !Ref "AWS::StackName"
-        MainStackID: !Ref "AWS::StackId"
-
-  FrontStorageOnlineGallery:
+  FrontStorage:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub
         - "https://s3.amazonaws.com/${Bucket}/cfn-templates/front/front-storage-template.yaml"
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+
+  CodeBuildFront:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/codebuild-template.yaml"
+        - Bucket:
+            Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+      Parameters:
+        S3BucketWebSite: !GetAtt FrontStorage.Outputs.S3BucketName
+        IdentityPoolId: !GetAtt Auth.Outputs.IdentityPoolId
+        CognitoRegion: !GetAtt Auth.Outputs.Region
+        UserPoolId: !GetAtt Auth.Outputs.UserPoolId
+        UserPoolWebClientId: !GetAtt Auth.Outputs.AppClientIDWeb
 
   DynamoDbTable:
     Type: "AWS::CloudFormation::Stack"
@@ -125,20 +139,18 @@ Resources:
           - "s3://${Bucket}/cfn-templates/graphQL/${GraphQLSchemaFileName}"
           - Bucket:
               Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
-        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
+        UserPoolId: !GetAtt Auth.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
 
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-cloudformation.html
-  CodeBuildOnlineGallery:
+  CodeBuildDeployLambda:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub
-        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/codebuild-template.yaml"
+        - "https://s3.amazonaws.com/${Bucket}/cfn-templates/build/lambdabuild-template.yaml"
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
-        S3BucketWebSite: !GetAtt FrontStorageOnlineGallery.Outputs.S3BucketName
-        IdentityPoolId: !GetAtt AuthOnlineGallery.Outputs.IdentityPoolId
-        CognitoRegion: !GetAtt AuthOnlineGallery.Outputs.Region
-        UserPoolId: !GetAtt AuthOnlineGallery.Outputs.UserPoolId
-        UserPoolWebClientId: !GetAtt AuthOnlineGallery.Outputs.AppClientIDWeb
+        S3BucketDeploy:
+          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        MainStackName: !Ref "AWS::StackName"
+        GraphqlApiId: !GetAtt GraphQLApi.Outputs.GraphQLApiId
