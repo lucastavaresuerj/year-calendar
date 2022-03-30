@@ -15,7 +15,7 @@ Parameters:
     Default: saves-bucket-calendar-year
   GraphQLSchemaFileName:
     Type: String
-    Default: schema.graphql
+    Default: schema-0.graphql
 
 Outputs:
   Region:
