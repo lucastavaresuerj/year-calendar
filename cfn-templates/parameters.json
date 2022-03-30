@@ -1,11 +1,11 @@
 [
   {
     "ParameterKey": "AuthRoleName",
-    "ParameterValue": "AuthRoleName-gallery"
+    "ParameterValue": "AuthRoleName-Calendar"
   },
   {
     "ParameterKey": "UnauthRoleName",
-    "ParameterValue": "UnauthRoleName-gallery"
+    "ParameterValue": "UnauthRoleName-Calendar"
   },
   {
     "ParameterKey": "S3SavesStackName",

@@ -5,14 +5,13 @@ Parameters:
   AuthRoleName:
     Type: String
     Default: AuthRoleName-Calendar
-    Description: Name of the common deployment bucket provided by the parent stack
   UnauthRoleName:
     Type: String
     Default: UnauthRoleName-Calendar
-    Description: Name of the common deployment bucket provided by the parent stack
   S3SavesStackName:
     Type: String
     Default: saves-bucket-calendar-year
+    Description: Name of the common deployment bucket provided by the parent stack
   GraphQLSchemaFileName:
     Type: String
     Default: schema-0.graphql
