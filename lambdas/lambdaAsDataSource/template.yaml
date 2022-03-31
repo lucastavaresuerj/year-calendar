@@ -9,14 +9,17 @@ Parameters:
   GraphqlApiId:
     Type: String
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+# More info about Globals:
+# https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
 
 Resources:
   LambdaAsDataSource:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    # More info about AWS::Serverless::Function:
+    # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: lambdaAsDataSource/
       Handler: app.handler
@@ -58,7 +61,7 @@ Resources:
         LambdaFunctionArn: !GetAtt LambdaAsDataSource.Arn
       ServiceRoleArn: !GetAtt AppSyncRole.Arn
 
-  AppSyncResolverPeople:
+  AppSyncResolver:
     Type: AWS::AppSync::Resolver
     Properties:
       ApiId: !Ref GraphqlApiId
@@ -76,11 +79,12 @@ Resources:
       ResponseMappingTemplate: $util.toJson($context.result)
 
 Outputs:
-  DeleteResizedFunctionIamRole:
-    Description: "Implicit IAM Role created for DeleteResized function"
+  FunctionRoleArn:
+    Description: Implicit IAM Role created for lambda function
     Value: !GetAtt LambdaAsDataSourceRole.Arn
-  DeleteResizedFunction:
-    Description: "Lambda Function ARN"
+  Function:
+    Description: Lambda Function Arn
     Value: !GetAtt LambdaAsDataSource.Arn
   AppSyncRole:
     Description: Service Role arn of appsync
+    Value: !GetAtt AppSyncRole.Arn
