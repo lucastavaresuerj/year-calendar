@@ -1,6 +1,6 @@
 exports.handler = async (event, context) => {
   console.log("aqui", context);
   return {
-    result: "Well done",
+    result: `Well done ${context?.identity?.username}`,
   };
 };
