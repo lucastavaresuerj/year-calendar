@@ -64,6 +64,7 @@ Resources:
         GitHubBranch: !Ref GitHubBranch
         CodeBuildEnvironmentImage: !Ref CodeBuildEnvironmentImage
 
+        MainStackName: !Ref MainStackName
         S3BucketWebSite: !Ref S3BucketWebSite
         IdentityPoolId: !Ref IdentityPoolId
         CognitoRegion: !Ref CognitoRegion

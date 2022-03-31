@@ -16,6 +16,9 @@ Parameters:
     Type: String
     Default: "aws/codebuild/standard:4.0"
 
+  MainStackName:
+    Type: String
+    AllowedPattern: "[A-Za-z0-9-]+"
   S3BucketWebSite:
     Type: String
     AllowedPattern: "[A-Za-z0-9-]+"
