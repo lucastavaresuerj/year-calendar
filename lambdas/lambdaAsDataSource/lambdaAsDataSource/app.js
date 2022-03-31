@@ -1,7 +1,6 @@
-exports.handler = async (event, context) => {
-  console.log("event", event);
-  console.log("context", context);
+exports.handler = async (event) => {
+  const { appSyncContext } = event;
   return {
-    result: `Well done`,
+    result: `Well done ${appSyncContext.identity.username}`,
   };
 };
