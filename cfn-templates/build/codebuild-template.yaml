@@ -40,7 +40,7 @@ Resources:
               Service: codebuild.amazonaws.com
             Action: "sts:AssumeRole"
       Policies:
-        - PolicyName: !Sub "root-codebuild-stack-${AWS::StackName}"
+        - PolicyName: !Sub "codebuild-front-policy-${MainStackName}"
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -83,7 +83,7 @@ Resources:
   CodeBuilProject:
     Type: "AWS::CodeBuild::Project"
     Properties:
-      Name: !Ref "AWS::StackName"
+      Name: !Sub "${MainStackName}-front"
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: GITHUB
