@@ -38,6 +38,8 @@ Parameters:
     Type: String
   GraphqlApiId:
     Type: String
+  DynamoDbTableName:
+    Type: String
 
 Resources:
   CodeBuildTemplate:
@@ -84,3 +86,4 @@ Resources:
         S3BucketDeploy: !Ref S3BucketDeploy
         MainStackName: !Ref MainStackName
         GraphqlApiId: !Ref GraphqlApiId
+        DynamoDbTableName: !Ref DynamoDbTableName

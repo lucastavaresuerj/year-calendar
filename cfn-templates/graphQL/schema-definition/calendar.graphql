@@ -1,6 +1,5 @@
 type Calendar {
   name: String
-  index: String
   user: String
   year: Int
   colNumber: Int
@@ -21,7 +20,6 @@ input InpCalendar {
 
 type CalendarPreview {
   name: String
-  index: String
   user: String
   year: Int
   title: Title

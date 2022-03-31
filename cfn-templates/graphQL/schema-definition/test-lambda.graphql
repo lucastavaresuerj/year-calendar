@@ -2,6 +2,21 @@ type TestLambda {
   result: String
 }
 
+input InpTestCalendar {
+  name: String
+  year: Int
+}
+
+type TestCalendar {
+  index: String
+  name: String
+  year: Int
+}
+
 extend type Query {
   testLambda: TestLambda
+}
+
+extend type Mutation {
+  testInputCalendar(calendar: InpTestCalendar): TestCalendar
 }

@@ -1,0 +1,150 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambdaAsDataSource
+
+  Sample SAM Template for test-sam
+
+Parameters:
+  GraphqlApiId:
+    Type: String
+  DynamoDbTableName:
+    Type: String
+  DynamoDbRegion:
+    Type: String
+
+# More info about Globals:
+# https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  GenIndex:
+    # More info about AWS::Serverless::Function:
+    # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: genIndex/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Architectures:
+        - x86_64
+
+  AppSyncRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: appsync.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AllowAccessToLambdaFromAppSync
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: lambda:invokeFunction
+                Resource:
+                  - !GetAtt GenIndex.Arn
+                  - !Sub
+                    - "${LambdaArn}:*"
+                    - LambdaArn: !GetAtt GenIndex.Arn
+        - PolicyName: AllowAccessForAppsyncResolvers
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:Query
+                - dynamodb:Scan
+                - dynamodb:UpdateItem
+                Resource: 
+                - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDbTableName}*'
+
+  LambdaDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: GenIndex
+      Type: AWS_LAMBDA
+      LambdaConfig:
+        LambdaFunctionArn: !GetAtt GenIndex.Arn
+      ServiceRoleArn: !GetAtt AppSyncRole.Arn
+
+  LambdaDataSourceFunc:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: GenIndex
+      DataSourceName: !GetAtt LambdaDataSource.Name
+      FunctionVersion: "2018-05-29"
+      DataSourceName: !GetAtt LambdaDataSource.Name
+      RequestMappingTemplate: |
+        { 
+          "version" : "2017-02-28",
+          "operation": "Invoke",
+          "payload": { 
+            "appSyncContext": $utils.toJson($context) 
+          }
+        }
+      ResponseMappingTemplate: $util.toJson($context.result)
+
+  DynamoDBDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: DynamoSource
+      Type: AMAZON_DYNAMODB
+      DynamoDBConfig:
+        AwsRegion: !Ref DynamoDbRegion
+        TableName: !Ref DynamoDbTableName
+        # UseCallerCredentials: Boolean
+      ServiceRoleArn: !GetAtt AppSyncRole.Arn
+
+  DynamoDBDataSourceFun:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: GenIndex
+      DataSourceName: !GetAtt DynamoDBDataSource.Name
+      FunctionVersion: "2018-05-29"
+      RequestMappingTemplate: |
+        { 
+          "version" : "2018-05-29",
+          "operation": "PutItem",
+          "payload": { 
+            "appSyncContext": $utils.toJson($context) 
+          }
+        }
+      ResponseMappingTemplate: $util.toJson($context.result)
+
+  AppSyncPipeResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      TypeName: Query
+      FieldName: testInputCalendar
+      Kind: PIPELINE
+      PipelineConfig:
+        Functions:
+          - !GetAtt AppSyncGenIndexFunc.FunctionId
+          - !GetAtt GetFriendsPostsFunction.FunctionId
+
+
+Outputs:
+  FunctionRoleArn:
+    Description: Implicit IAM Role created for lambda function
+    Value: !GetAtt GenIndexRole.Arn
+  Function:
+    Description: Lambda Function Arn
+    Value: !GetAtt GenIndex.Arn
+  AppSyncRole:
+    Description: Service Role arn of appsync
+    Value: !GetAtt AppSyncRole.Arn
