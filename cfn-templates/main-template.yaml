@@ -133,3 +133,4 @@ Resources:
         UserPoolWebClientId: !GetAtt Auth.Outputs.AppClientIDWeb
         GraphqlApiId: !GetAtt GraphQLApi.Outputs.GraphQLApiId
         DynamoDbTableName: !GetAtt DynamoDbTable.Outputs.DBName
+        DynamoDbTableRegion: !GetAtt DynamoDbTable.Outputs.DBRegion

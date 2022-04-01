@@ -24,6 +24,10 @@ Parameters:
     AllowedPattern: "[A-Za-z0-9-]+"
   GraphqlApiId:
     Type: String
+  DynamoDbTableName:
+    Type: String
+  DynamoDbTableRegion:
+    Type: String
 
 Resources:
   DeployBucketPolicy:
@@ -94,6 +98,10 @@ Resources:
             Value: !Ref S3BucketDeploy
           - Name: GRAPHQL_API_ID
             Value: !Ref GraphqlApiId
+          - Name: DYNAMODB_NAME
+            Value: !Ref DynamoDbTableName
+          - Name: DYNAMODB_REGION
+            Value: !Ref DynamoDbTableRegion
 
 Outputs:
   CodeBuild:

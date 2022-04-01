@@ -31,6 +31,9 @@ Outputs:
   DBName:
     Value: !Ref DynamoDBTable
     Description: Database table name
+  DBRegion:
+    Value: !Ref "AWS::Region"
+    Description: Database table name
   DBStreamArn:
     Value: !GetAtt DynamoDBTable.StreamArn
     Description: Database stream arn

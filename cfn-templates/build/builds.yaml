@@ -40,6 +40,8 @@ Parameters:
     Type: String
   DynamoDbTableName:
     Type: String
+  DynamoDbTableRegion:
+    Type: String
 
 Resources:
   CodeBuildTemplate:
@@ -87,3 +89,4 @@ Resources:
         MainStackName: !Ref MainStackName
         GraphqlApiId: !Ref GraphqlApiId
         DynamoDbTableName: !Ref DynamoDbTableName
+        DynamoDbTableRegion: !Ref DynamoDbTableRegion

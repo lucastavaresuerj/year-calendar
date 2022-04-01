@@ -5,6 +5,8 @@ env:
     STACK_NAME: ""
     S3_BUCKET_DEPLOY: ""
     GRAPHQL_API_ID: ""
+    DYNAMODB_NAME: ""
+    DYNAMODB_REGION: ""
 
 phases:
   install:
@@ -22,4 +24,6 @@ phases:
         STACK_NAME=${STACK_NAME} \
         S3_BUCKET_DEPLOY=${S3_BUCKET_DEPLOY} \
         GRAPHQL_API_ID=${GRAPHQL_API_ID} \
+        DYNAMODB_NAME=${DYNAMODB_NAME} \
+        DYNAMODB_REGION=${DYNAMODB_REGION} \
         ./spec-scripts/lambda/deploy-lambdas.sh
