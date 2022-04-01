@@ -130,6 +130,7 @@ Resources:
         }
       ResponseMappingTemplate: $util.toJson($context.result)
 
+
   AppSyncPipeResolver:
     Type: AWS::AppSync::Resolver
     Properties:
@@ -137,6 +138,11 @@ Resources:
       TypeName: Mutation
       FieldName: testInputCalendar
       Kind: PIPELINE
+      RequestMappingTemplate: |        
+        {
+          "version": "2018-05-29",
+          "payload": $util.toJson($context)
+        }
       PipelineConfig:
         Functions:
           - !GetAtt LambdaDataSourceFunc.FunctionId

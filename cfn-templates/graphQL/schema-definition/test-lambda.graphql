@@ -2,7 +2,6 @@ type TestLambda {
   result: String
 }
 
-# The  index will be generated at a lambda function
 input InpTestCalendar {
   name: String
   year: Int
