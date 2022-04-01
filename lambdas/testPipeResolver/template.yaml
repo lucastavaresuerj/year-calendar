@@ -112,7 +112,7 @@ Resources:
     Type: AWS::AppSync::FunctionConfiguration
     Properties:
       ApiId: !Ref GraphqlApiId
-      Name: GenIndex
+      Name: Put-testInputCalendar
       DataSourceName: !GetAtt DynamoDBDataSource.Name
       FunctionVersion: "2018-05-29"
       RequestMappingTemplate: |
@@ -124,7 +124,7 @@ Resources:
             "user": $util.dynamodb.toDynamoDBJson($context.arguments.username)
           }
           "attributeValues" : {
-              "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year)
+              "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year),
               "name" : $util.dynamodb.toDynamoDBJson($context.arguments.name)
           }
         }
