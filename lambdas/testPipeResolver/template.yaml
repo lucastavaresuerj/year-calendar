@@ -119,8 +119,12 @@ Resources:
         { 
           "version" : "2018-05-29",
           "operation": "PutItem",
-          "payload": { 
-            "appSyncContext": $utils.toJson($context) 
+          "key": { 
+            "index": $util.dynamodb.toDynamoDBJson($context.prev.result.index),
+            "name": $util.dynamodb.toDynamoDBJson($context.arguments.name)
+          }
+          "attributeValues" : {
+              "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year)
           }
         }
       ResponseMappingTemplate: $util.toJson($context.result)
@@ -129,7 +133,7 @@ Resources:
     Type: AWS::AppSync::Resolver
     Properties:
       ApiId: !Ref GraphqlApiId
-      TypeName: Query
+      TypeName: Mutation
       FieldName: testInputCalendar
       Kind: PIPELINE
       PipelineConfig:

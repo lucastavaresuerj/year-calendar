@@ -3,11 +3,13 @@ exports.handler = async (event) => {
     appSyncContext: {
       identity: { username },
       arguments: { name },
+      arguments,
     },
   } = event;
   const random = (Math.random() * 1000000).toFixed(0);
 
   return {
-    index: `${username}-${name}-${arguments}`,
+    ...arguments,
+    index: `${username}-${name}-${random}`,
   };
 };
