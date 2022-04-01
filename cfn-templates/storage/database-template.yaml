@@ -12,12 +12,12 @@ Resources:
     Properties:
       TableName: !Ref TableName
       AttributeDefinitions:
-        - AttributeName: "name"
+        - AttributeName: "index"
           AttributeType: "S"
         - AttributeName: "user"
           AttributeType: "S"
       KeySchema:
-        - AttributeName: "name"
+        - AttributeName: "index"
           KeyType: "HASH"
         - AttributeName: "user"
           KeyType: "RANGE"
