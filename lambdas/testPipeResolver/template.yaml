@@ -143,6 +143,7 @@ Resources:
           "version": "2018-05-29",
           "payload": $util.toJson($context)
         }
+      ResponseMappingTemplate: $util.toJson($context.result)
       PipelineConfig:
         Functions:
           - !GetAtt LambdaDataSourceFunc.FunctionId
