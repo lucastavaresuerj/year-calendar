@@ -122,7 +122,7 @@ Resources:
           "key": { 
             "index": $util.dynamodb.toDynamoDBJson($context.prev.result.index),
             "user": $util.dynamodb.toDynamoDBJson($context.identity.username)
-          }
+          },
           "attributeValues": {
             "year" : $util.dynamodb.toDynamoDBJson($context.arguments.input.year),
             "name" : $util.dynamodb.toDynamoDBJson($context.arguments.input.name)
