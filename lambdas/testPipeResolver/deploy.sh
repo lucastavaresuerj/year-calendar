@@ -5,4 +5,6 @@ sam deploy \
   --s3-prefix "lambdas/${FOLDER_NAME}" \
   --parameter-overrides \
       GraphqlApiId=${GRAPHQL_API_ID} \
+      DynamoDbTableName=${DYNAMODB_NAME} \
+      DynamoDbRegion=${DYNAMODB_REGION} \
   --capabilities CAPABILITY_IAM

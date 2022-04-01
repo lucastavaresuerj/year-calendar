@@ -125,6 +125,7 @@ Resources:
           }
           "attributeValues" : {
               "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year)
+              "name" : $util.dynamodb.toDynamoDBJson($context.arguments.name)
           }
         }
       ResponseMappingTemplate: $util.toJson($context.result)
