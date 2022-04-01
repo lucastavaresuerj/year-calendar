@@ -112,7 +112,7 @@ Resources:
     Type: AWS::AppSync::FunctionConfiguration
     Properties:
       ApiId: !Ref GraphqlApiId
-      Name: Put-testInputCalendar
+      Name: PutTestInputCalendar
       DataSourceName: !GetAtt DynamoDBDataSource.Name
       FunctionVersion: "2018-05-29"
       RequestMappingTemplate: |
