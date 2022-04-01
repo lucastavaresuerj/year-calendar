@@ -121,7 +121,7 @@ Resources:
           "operation": "PutItem",
           "key": { 
             "index": $util.dynamodb.toDynamoDBJson($context.prev.result.index),
-            "name": $util.dynamodb.toDynamoDBJson($context.arguments.name)
+            "user": $util.dynamodb.toDynamoDBJson($context.arguments.username)
           }
           "attributeValues" : {
               "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year)
