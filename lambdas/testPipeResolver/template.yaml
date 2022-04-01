@@ -139,8 +139,8 @@ Resources:
       Kind: PIPELINE
       PipelineConfig:
         Functions:
-          - !GetAtt AppSyncGenIndexFunc.FunctionId
-          - !GetAtt GetFriendsPostsFunction.FunctionId
+          - !GetAtt LambdaDataSourceFunc.FunctionId
+          - !GetAtt DynamoDBDataSourceFun.FunctionId
 
 
 Outputs:
