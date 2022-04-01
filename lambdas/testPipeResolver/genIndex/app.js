@@ -2,7 +2,9 @@ exports.handler = async (event) => {
   const {
     appSyncContext: {
       identity: { username },
-      arguments: { name },
+      arguments: {
+        input: { name },
+      },
       arguments,
     },
   } = event;

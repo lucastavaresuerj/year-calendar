@@ -117,15 +117,15 @@ Resources:
       FunctionVersion: "2018-05-29"
       RequestMappingTemplate: |
         { 
-          "version" : "2018-05-29",
+          "version": "2018-05-29",
           "operation": "PutItem",
           "key": { 
             "index": $util.dynamodb.toDynamoDBJson($context.prev.result.index),
-            "user": $util.dynamodb.toDynamoDBJson($context.arguments.username)
+            "user": $util.dynamodb.toDynamoDBJson($context.identity.username)
           }
-          "attributeValues" : {
-              "year" : $util.dynamodb.toDynamoDBJson($context.arguments.year),
-              "name" : $util.dynamodb.toDynamoDBJson($context.arguments.name)
+          "attributeValues": {
+            "year" : $util.dynamodb.toDynamoDBJson($context.arguments.input.year),
+            "name" : $util.dynamodb.toDynamoDBJson($context.arguments.input.name)
           }
         }
       ResponseMappingTemplate: $util.toJson($context.result)
