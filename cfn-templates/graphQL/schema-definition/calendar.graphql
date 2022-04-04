@@ -1,4 +1,5 @@
 type Calendar {
+  index: String
   name: String
   user: String
   year: Int
@@ -19,6 +20,7 @@ input InpCalendar {
 }
 
 type CalendarPreview {
+  index: String
   name: String
   user: String
   year: Int
@@ -27,7 +29,7 @@ type CalendarPreview {
 }
 
 extend type Query {
-  calendar(id: Int): Calendar
+  calendar(id: String): Calendar
   cardPreview: [CalendarPreview!] # Pagination
 }
 
