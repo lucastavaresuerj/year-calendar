@@ -43,7 +43,7 @@ Resources:
     Type: AWS::AppSync::DataSource
     Properties:
       ApiId: !Ref GraphQLApiId
-      Name: DynamoSource
+      Name: !Sub "DynamoDbSource-${DynamoDbName}-${GraphQLApiId}"
       Type: AMAZON_DYNAMODB
       DynamoDBConfig:
         AwsRegion: !Ref DynamoDbRegion
