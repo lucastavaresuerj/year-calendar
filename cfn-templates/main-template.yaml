@@ -112,8 +112,8 @@ Resources:
         GraphQLSchemaFileName: !Ref GraphQLSchemaFileName
         UserPoolId: !GetAtt Auth.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
-        DynamoDbTableName: !GetAtt DynamoDbTable.Outputs.DBName
-        DynamoDbTableRegion: !GetAtt DynamoDbTable.Outputs.DBRegion
+        DynamoDbName: !GetAtt DynamoDbTable.Outputs.DBName
+        DynamoDbRegion: !GetAtt DynamoDbTable.Outputs.DBRegion
 
   CodeBuildBuildsStacks:
     Type: "AWS::CloudFormation::Stack"

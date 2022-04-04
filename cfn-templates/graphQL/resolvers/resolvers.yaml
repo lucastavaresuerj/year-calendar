@@ -5,7 +5,7 @@ Parameters:
   GraphQlApiId:
     Type: String
     Default: Calendar-Year-GraphQL
-  DynamoDbTableName:
+  DynamoDbName:
     Type: String
   DynamoDbRegion:
     Type: String
@@ -35,7 +35,7 @@ Resources:
                   - dynamodb:Scan
                   - dynamodb:UpdateItem
                 Resource:
-                  - !Sub "arn:aws:dynamodb:${DynamoDbRegion}:${AWS::AccountId}:table/${DynamoDbTableName}*"
+                  - !Sub "arn:aws:dynamodb:${DynamoDbRegion}:${AWS::AccountId}:table/${DynamoDbName}*"
 
   DynamoDBDataSource:
     Type: AWS::AppSync::DataSource
@@ -45,7 +45,7 @@ Resources:
       Type: AMAZON_DYNAMODB
       DynamoDBConfig:
         AwsRegion: !Ref DynamoDbRegion
-        TableName: !Ref DynamoDbTableName
+        TableName: !Ref DynamoDbName
       ServiceRoleArn: !GetAtt AppSyncRole.Arn
 
   QueryCalendar:

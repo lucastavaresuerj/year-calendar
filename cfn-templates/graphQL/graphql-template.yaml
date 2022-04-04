@@ -13,7 +13,7 @@ Parameters:
     Type: String
   S3BucketDeploy:
     Type: String
-  DynamoDbTableName:
+  DynamoDbName:
     Type: String
   DynamoDbRegion:
     Type: String
@@ -42,8 +42,8 @@ Resources:
       Parameters:
         S3BucketDeploy: !Ref S3BucketDeploy
         GraphQlApiId: !GetAtt GraphQLApi.ApiId
-        DynamoDbTableName: !Ref DynamoDbTableName
-        DynamoDbTableRegion: !Ref DynamoDbTableRegion
+        DynamoDbRegion: !Ref DynamoDbName
+        DynamoDbRegion: !Ref DynamoDbRegion
 
 Outputs:
   GraphQLApiId:
