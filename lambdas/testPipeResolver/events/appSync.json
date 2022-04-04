@@ -1,7 +1,9 @@
 {
   "appSyncContext": {
     "arguments": {
-      "id": "my identifier"
+      "input": {
+        "id": "my identifier"
+      }
     },
     "identity": {
       "claims": {

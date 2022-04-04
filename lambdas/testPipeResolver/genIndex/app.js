@@ -2,17 +2,17 @@ exports.handler = async (event) => {
   const {
     appSyncContext: {
       identity: { username },
-      arguments,
+      arguments: cntxArgs,
+      arguments: {
+        calendar: { name },
+      },
     },
   } = event;
-  const {
-    input: { name },
-  } = arguments;
 
   const random = (Math.random() * 1000000).toFixed(0);
 
   return {
-    ...arguments["input"],
+    ...cntxArgs,
     index: `${username}-${name}-${random}`,
   };
 };

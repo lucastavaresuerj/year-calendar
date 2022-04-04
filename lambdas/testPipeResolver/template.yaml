@@ -105,7 +105,6 @@ Resources:
       DynamoDBConfig:
         AwsRegion: !Ref DynamoDbRegion
         TableName: !Ref DynamoDbTableName
-        # UseCallerCredentials: Boolean
       ServiceRoleArn: !GetAtt AppSyncRole.Arn
 
   DynamoDBDataSourceFun:
@@ -119,13 +118,16 @@ Resources:
         { 
           "version": "2018-05-29",
           "operation": "PutItem",
+
+          #set( $calendar = $context.arguments.calendar)
+
           "key": { 
             "index": $util.dynamodb.toDynamoDBJson($context.prev.result.index),
             "user": $util.dynamodb.toDynamoDBJson($context.identity.username)
           },
           "attributeValues": {
-            "year" : $util.dynamodb.toDynamoDBJson($context.arguments.input.year),
-            "name" : $util.dynamodb.toDynamoDBJson($context.arguments.input.name)
+            "year" : $util.dynamodb.toDynamoDBJson($calendar.year),
+            "name" : $util.dynamodb.toDynamoDBJson($calendar.name)
           }
         }
       ResponseMappingTemplate: $util.toJson($context.result)
