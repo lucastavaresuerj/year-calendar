@@ -12,21 +12,20 @@ Resources:
     Type: AWS::AppSync::Resolver
     Properties:
       ApiId: !Ref GraphQLApiId
-      TypeName: Query
-      FieldName: calendar
+      TypeName: Mutation
+      FieldName: addCalendar
       DataSourceName: !Ref DynamoDBDataSourceName
       RequestMappingTemplate: |
         { 
           "version": "2018-05-29",
-          "operation": "GetItem",
+          "operation": "PutItem",
 
-          #set($id = $context.arguments.id)
           #set($user = $context.identity.username)
 
           "key": {
-            "index": $util.dynamodb.toDynamoDBJson($id),
+            "index": $util.dynamodb.toDynamoDBJson($util.autoUlid()),
             "user": $util.dynamodb.toDynamoDBJson($user)
           },
-          "consistentRead": true
+          "attributeValues": $util.dynamodb.toMapValuesJson($context.arguments)
         }
       ResponseMappingTemplate: $util.toJson($context.result)
