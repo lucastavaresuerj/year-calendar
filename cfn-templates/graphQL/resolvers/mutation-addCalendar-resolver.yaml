@@ -26,6 +26,6 @@ Resources:
             "index": $util.dynamodb.toDynamoDBJson($util.autoUlid()),
             "user": $util.dynamodb.toDynamoDBJson($user)
           },
-          "attributeValues": $util.dynamodb.toMapValuesJson($context.arguments)
+          "attributeValues": $util.dynamodb.toMapValuesJson($context.arguments.calendar)
         }
       ResponseMappingTemplate: $util.toJson($context.result)

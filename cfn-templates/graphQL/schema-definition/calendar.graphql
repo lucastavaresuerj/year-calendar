@@ -14,8 +14,8 @@ input InpCalendar {
   year: Int!
   colNumber: Int!
   title: InpTitle!
-  defaultMonth: InpMonthGlobal!
-  months: [InpMonth!]!
+  defaultMonth: InpMonthGlobal
+  months: [InpMonth!]
 }
 
 type CalendarPreview {
