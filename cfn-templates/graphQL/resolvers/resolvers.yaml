@@ -6,7 +6,6 @@ Parameters:
     Type: String
   GraphQLApiId:
     Type: String
-    Default: Calendar-Year-GraphQL
   DynamoDbName:
     Type: String
   DynamoDbRegion:
@@ -43,7 +42,7 @@ Resources:
     Type: AWS::AppSync::DataSource
     Properties:
       ApiId: !Ref GraphQLApiId
-      Name: !Sub "DynamoDbSource-${DynamoDbName}-${GraphQLApiId}"
+      Name: !Sub "DynamoDbSource_${GraphQLApiId}"
       Type: AMAZON_DYNAMODB
       DynamoDBConfig:
         AwsRegion: !Ref DynamoDbRegion
