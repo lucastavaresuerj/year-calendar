@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Create a resolver
 
 Parameters:
-  GraphqlApiId:
+  GraphQLApiId:
     Type: String
     Default: Calendar-Year-GraphQL
   DynamoDBDataSourceName:
@@ -12,7 +12,7 @@ Resources:
   AppSyncResolver:
     Type: AWS::AppSync::Resolver
     Properties:
-      ApiId: !Ref GraphqlApiId
+      ApiId: !Ref GraphQLApiId
       TypeName: Query
       FieldName: calendar
       DataSourceName: !Ref DynamoDBDataSourceName
