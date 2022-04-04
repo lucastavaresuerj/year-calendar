@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Agroup all resolvers
+
+Parameters:
+  GraphQlApiId:
+    Type: String
+    Default: Calendar-Year-GraphQL
+  DynamoDbTableName:
+    Type: String
+  DynamoDbRegion:
+    Type: String
+
+Resources:
+  AppSyncRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: appsync.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub "${GraphQlApiId}-${DynamoDbRegion}-DynamoDbActions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:UpdateItem
+                Resource:
+                  - !Sub "arn:aws:dynamodb:${DynamoDbRegion}:${AWS::AccountId}:table/${DynamoDbTableName}*"
+
+  DynamoDBDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: DynamoSource
+      Type: AMAZON_DYNAMODB
+      DynamoDBConfig:
+        AwsRegion: !Ref DynamoDbRegion
+        TableName: !Ref DynamoDbTableName
+      ServiceRoleArn: !GetAtt AppSyncRole.Arn
+
+  QueryCalendar:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/resolvers/query-calendar-resolver.yaml"
+      Parameters:
+        GraphQlApiId: !Ref GraphQlApiId
+        DynamoDBDataSourceName: !GetAtt DynamoDBDataSource.Name

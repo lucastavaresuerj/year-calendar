@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create a resolver
+
+Parameters:
+  GraphqlApiId:
+    Type: String
+    Default: Calendar-Year-GraphQL
+  DynamoDBDataSourceName:
+    Type: String
+
+Resources:
+  AppSyncResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      TypeName: Query
+      FieldName: calendar
+      DataSourceName: !Ref DynamoDBDataSourceName
+      RequestMappingTemplate: |
+        { 
+          "version": "2018-05-29",
+          "operation": "GetItem",
+
+          #set($id = $context.arguments.id)
+          #set($user = $context.identity.username)
+
+          "key": {
+            "index": $util.dynamodb.toDynamoDBJson($id),
+            "user": $util.dynamodb.toDynamoDBJson($user)
+          },
+          "consistentRead": true
+        }
+      ResponseMappingTemplate: $util.toJson($context.result)

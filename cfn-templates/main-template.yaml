@@ -107,12 +107,13 @@ Resources:
         - Bucket:
             Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
       Parameters:
-        GraphQLSchemaFileS3Location: !Sub
-          - "s3://${Bucket}/cfn-templates/graphQL/${GraphQLSchemaFileName}"
-          - Bucket:
-              Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        S3BucketDeploy:
+          Fn::ImportValue: !Sub "${S3SavesStackName}-BucketName"
+        GraphQLSchemaFileName: !Ref GraphQLSchemaFileName
         UserPoolId: !GetAtt Auth.Outputs.UserPoolId
         UserPoolAwsRegion: !Ref "AWS::Region"
+        DynamoDbTableName: !GetAtt DynamoDbTable.Outputs.DBName
+        DynamoDbTableRegion: !GetAtt DynamoDbTable.Outputs.DBRegion
 
   CodeBuildBuildsStacks:
     Type: "AWS::CloudFormation::Stack"

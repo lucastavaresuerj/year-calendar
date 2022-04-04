@@ -5,11 +5,17 @@ Parameters:
   GraphQlApiName:
     Type: String
     Default: Calendar-Year-GraphQL
+  GraphQLSchemaFileName:
+    Type: String
   UserPoolId:
     Type: String
   UserPoolAwsRegion:
     Type: String
-  GraphQLSchemaFileS3Location:
+  S3BucketDeploy:
+    Type: String
+  DynamoDbTableName:
+    Type: String
+  DynamoDbRegion:
     Type: String
 
 Resources:
@@ -27,7 +33,17 @@ Resources:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      DefinitionS3Location: !Ref GraphQLSchemaFileS3Location
+      DefinitionS3Location: !Sub "s3://${S3BucketDeploy}/cfn-templates/graphQL/${GraphQLSchemaFileName}"
+
+  Resolvers:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/resolvers/resolvers.yaml"
+      Parameters:
+        S3BucketDeploy: !Ref S3BucketDeploy
+        GraphQlApiId: !GetAtt GraphQLApi.ApiId
+        DynamoDbTableName: !Ref DynamoDbTableName
+        DynamoDbTableRegion: !Ref DynamoDbTableRegion
 
 Outputs:
   GraphQLApiId:

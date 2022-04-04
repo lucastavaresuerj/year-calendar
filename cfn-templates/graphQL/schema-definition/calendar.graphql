@@ -28,7 +28,7 @@ type CalendarPreview {
 
 extend type Query {
   calendar(id: Int): Calendar
-  cardPreview: [CalendarPreview!]
+  cardPreview: [CalendarPreview!] # Pagination
 }
 
 extend type Mutation {
