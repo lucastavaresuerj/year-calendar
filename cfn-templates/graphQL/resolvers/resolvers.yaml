@@ -4,7 +4,7 @@ Description: Agroup all resolvers
 Parameters:
   S3BucketDeploy:
     Type: String
-  GraphQlApiId:
+  GraphQLApiId:
     Type: String
     Default: Calendar-Year-GraphQL
   DynamoDbName:
@@ -25,7 +25,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Policies:
-        - PolicyName: !Sub "${GraphQlApiId}-${DynamoDbRegion}-DynamoDbActions"
+        - PolicyName: !Sub "${GraphQLApiId}-${DynamoDbRegion}-DynamoDbActions"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -42,7 +42,7 @@ Resources:
   DynamoDBDataSource:
     Type: AWS::AppSync::DataSource
     Properties:
-      ApiId: !Ref GraphqlApiId
+      ApiId: !Ref GraphQLApiId
       Name: DynamoSource
       Type: AMAZON_DYNAMODB
       DynamoDBConfig:
@@ -55,5 +55,5 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/resolvers/query-calendar-resolver.yaml"
       Parameters:
-        GraphQlApiId: !Ref GraphQlApiId
+        GraphQLApiId: !Ref GraphQLApiId
         DynamoDBDataSourceName: !GetAtt DynamoDBDataSource.Name

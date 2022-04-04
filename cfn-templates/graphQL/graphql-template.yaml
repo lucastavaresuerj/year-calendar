@@ -41,7 +41,7 @@ Resources:
       TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/resolvers/resolvers.yaml"
       Parameters:
         S3BucketDeploy: !Ref S3BucketDeploy
-        GraphQlApiId: !GetAtt GraphQLApi.ApiId
+        GraphQLApiId: !GetAtt GraphQLApi.ApiId
         DynamoDbName: !Ref DynamoDbName
         DynamoDbRegion: !Ref DynamoDbRegion
 
