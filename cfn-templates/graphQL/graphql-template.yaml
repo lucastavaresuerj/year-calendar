@@ -2,6 +2,8 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Create a GraphQL from AppSync
 
 Parameters:
+  S3BucketDeploy:
+    Type: String
   GraphQlApiName:
     Type: String
     Default: Calendar-Year-GraphQL
@@ -10,8 +12,6 @@ Parameters:
   UserPoolId:
     Type: String
   UserPoolAwsRegion:
-    Type: String
-  S3BucketDeploy:
     Type: String
   DynamoDbName:
     Type: String

@@ -2,6 +2,8 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Agroup all resolvers
 
 Parameters:
+  S3BucketDeploy:
+    Type: String
   GraphQlApiId:
     Type: String
     Default: Calendar-Year-GraphQL
