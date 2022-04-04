@@ -42,7 +42,7 @@ Resources:
       Parameters:
         S3BucketDeploy: !Ref S3BucketDeploy
         GraphQlApiId: !GetAtt GraphQLApi.ApiId
-        DynamoDbRegion: !Ref DynamoDbName
+        DynamoDbName: !Ref DynamoDbName
         DynamoDbRegion: !Ref DynamoDbRegion
 
 Outputs:
