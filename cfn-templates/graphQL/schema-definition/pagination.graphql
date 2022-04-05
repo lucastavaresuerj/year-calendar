@@ -2,7 +2,7 @@ interface Pagination {
   nextToken: String
 }
 
-type InpPagination implements Pagination {
+input InpPagination implements Pagination {
   nextToken: String
   limit: Int
 }

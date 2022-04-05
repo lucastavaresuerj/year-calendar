@@ -21,5 +21,7 @@ echo "Linting \"schema-${CODEBUILD_BUILD_NUMBER}.graphql\""
     "./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql"
 } || { # Catch
   echo "The linter find some errors, exiting script"
+  echo "Deleting new schema"
+  rm ./${GRAPHQL_FOLDER_PATH}/schema-${CODEBUILD_BUILD_NUMBER}.graphql
   exit 1
 } || exit

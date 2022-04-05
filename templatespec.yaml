@@ -19,6 +19,7 @@ phases:
   pre_build:
     on-failure: CONTINUE
     commands:
+      - ./spec-scripts/template/find-last-schema-build.sh
       - ./spec-scripts/template/merge-and-lint-graphql-files.sh
       - ./spec-scripts/template/compare-and-change-params.sh
 
