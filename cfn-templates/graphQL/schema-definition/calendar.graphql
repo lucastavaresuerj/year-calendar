@@ -12,7 +12,7 @@ type Calendar {
 input InpCalendar {
   name: String!
   year: Int!
-  colNumber: Int!
+  colNumber: Int
   title: InpTitle!
   defaultMonth: InpMonthGlobal
   months: [InpMonth!]
