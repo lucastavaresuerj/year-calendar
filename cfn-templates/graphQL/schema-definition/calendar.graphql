@@ -27,9 +27,14 @@ type CalendarPreview {
   months: [Month!] # Should return only the first month
 }
 
+type PagCalendarPreview implements Pagination {
+  items: [CalendarPreview!]
+  nextToken: String
+}
+
 extend type Query {
   calendar(id: String): Calendar
-  cardPreview: [CalendarPreview!] # Pagination
+  cardPreview(pagination: InpPagination): [PagCalendarPreview!] # Pagination
 }
 
 extend type Mutation {

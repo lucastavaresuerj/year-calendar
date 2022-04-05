@@ -1,0 +1,8 @@
+interface Pagination {
+  nextToken: String
+}
+
+type InpPagination implements Pagination {
+  nextToken: String
+  limit: Int
+}

@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create a resolver
+
+Parameters:
+  GraphQLApiId:
+    Type: String
+  DynamoDBDataSourceName:
+    Type: String
+
+Resources:
+  AppSyncResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !Ref GraphQLApiId
+      TypeName: Query
+      FieldName: calendar
+      DataSourceName: !Ref DynamoDBDataSourceName
+      RequestMappingTemplate: |
+        { 
+          "version": "2018-05-29",
+          "operation": "Scan",
+
+          #set($user = $context.identity.username)
+          #set($nextToken = $util.defaultIfNullOrBlank($context.arguments.pagination.nextToken, null))
+          #set($limit = $util.defaultIfNull($context.arguments.pagination.limit, 20))
+
+          "filter" : {
+            "expression": "user = :user",
+            "expressionValues": {
+              ":user": $util.dynamodb.toDynamoDBJson($user)
+            }
+          },
+          "nextToken": $util.toJson($nextToken),
+          "limit": $limit
+        }
+      ResponseMappingTemplate: $util.toJson($context.result)
