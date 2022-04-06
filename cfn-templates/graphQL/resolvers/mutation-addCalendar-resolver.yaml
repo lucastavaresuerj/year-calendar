@@ -21,11 +21,15 @@ Resources:
           "operation": "PutItem",
 
           #set($user = $context.identity.username)
+          #set($userSub = $context.identity.sub)
 
           "key": {
             "index": $util.dynamodb.toDynamoDBJson($util.autoUlid()),
-            "user": $util.dynamodb.toDynamoDBJson($user)
+            "userSub": $util.dynamodb.toDynamoDBJson($userSub)
           },
-          "attributeValues": $util.dynamodb.toMapValuesJson($context.arguments.calendar)
+          "attributeValues": $util.dynamodb.toMapValuesJson({
+            $context.arguments.calendar,
+            "user":$user
+          })
         }
       ResponseMappingTemplate: $util.toJson($context.result)
