@@ -13,7 +13,49 @@ Parameters:
     Type: String
 
 Resources:
+  UpdateRolesWithIDPFunctionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AuthRoleName}-ipd"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+
+  UpdateRolesWithIDPFunctionPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      Roles:
+        - !Ref UpdateRolesWithIDPFunctionRole
+      PolicyName: UpdateRolesWithIDPFunctionPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "logs:CreateLogGroup"
+              - "logs:CreateLogStream"
+              - "logs:PutLogEvents"
+            Resource: "arn:aws:logs:*:*:*"
+          - Effect: Allow
+            Action:
+              - "iam:UpdateAssumeRolePolicy"
+              - "iam:GetRole"
+            Resource: !Ref AuthRoleArn
+          - Effect: Allow
+            Action:
+              - "iam:UpdateAssumeRolePolicy"
+              - "iam:GetRole"
+            Resource: !Ref UnauthRoleArn
+
   UpdateRolesWithIDPFunction:
+    DependsOn:
+      - UpdateRolesWithIDPFunctionRole
     Type: "AWS::Lambda::Function"
     Properties:
       Code:
@@ -92,38 +134,3 @@ Resources:
       idpId: !Ref IdentityPoolId
       authRoleName: !Ref AuthRoleName
       unauthRoleName: !Ref UnauthRoleName
-
-  UpdateRolesWithIDPFunctionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      RoleName: !Sub "${AuthRoleName}-ipd"
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - "sts:AssumeRole"
-      Policies:
-        - PolicyName: UpdateRolesWithIDPFunctionPolicy
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
-                Resource: "arn:aws:logs:*:*:*"
-              - Effect: Allow
-                Action:
-                  - "iam:UpdateAssumeRolePolicy"
-                  - "iam:GetRole"
-                Resource: !Ref AuthRoleArn
-              - Effect: Allow
-                Action:
-                  - "iam:UpdateAssumeRolePolicy"
-                  - "iam:GetRole"
-                Resource: !Ref UnauthRoleArn
