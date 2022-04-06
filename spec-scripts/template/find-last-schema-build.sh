@@ -10,7 +10,10 @@
     --exclude "*/" \
     --include "schema-*.graphql" | \
     grep "download"
-} || { # Catch
+} && { # Do if has no error on Try block
+  exit 0
+}|| { # Catch
   echo "There is no file with name like 'schema-*.graphql'"
   echo "Ending script"
-}
+  exit 1
+} || exit

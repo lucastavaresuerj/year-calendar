@@ -2,6 +2,21 @@
 # S3_BUCKET_NAME=saves-bucket-calendar-year-savesbucket-nx3ap2uftsmb
 # CODEBUILD_BUILD_NUMBER=1
 
+update_parameters() {
+	echo "Changing parameter GraphQLSchemaFileName"
+	cat cfn-templates/parameters.json | \
+		fx ".map($(cat cfn-templates/mapParams.js))" \
+		> cfn-templates/parameters.json
+}
+
+{ # Try
+	./spec-scripts/template/find-last-schema-build.sh
+} || { # Catch
+	echo "There is no need to try the diff once there is no previous schema build"
+	update_parameters()
+	exit
+}
+  
 { # Try
 	diff ./${GRAPHQL_FOLDER_PATH}/schema-*.graphql
 	ERRO_CODE=$?
@@ -20,10 +35,7 @@
       -not -name "*${CODEBUILD_BUILD_NUMBER}.graphql" \
       -delete \
       -print
-    echo "Changing parameter GraphQLSchemaFileName"
-    cat cfn-templates/parameters.json | \
-      fx ".map($(cat cfn-templates/mapParams.js))" \
-      > cfn-templates/parameters.json
+    update_parameters()
 	};;
 	2) { 
 		echo "Diff params error, \nListing files like 'schema-*.graphql'"
