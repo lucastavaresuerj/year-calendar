@@ -13,7 +13,7 @@ update_parameters() {
 	./spec-scripts/template/find-last-schema-build.sh
 } || { # Catch
 	echo "There is no need to try the diff once there is no previous schema build"
-	update_parameters()
+	update_parameters
 	exit
 }
   
@@ -35,7 +35,7 @@ update_parameters() {
       -not -name "*${CODEBUILD_BUILD_NUMBER}.graphql" \
       -delete \
       -print
-    update_parameters()
+    update_parameters
 	};;
 	2) { 
 		echo "Diff params error, \nListing files like 'schema-*.graphql'"
