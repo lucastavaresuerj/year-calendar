@@ -21,11 +21,11 @@ Resources:
           "operation": "GetItem",
 
           #set($id = $context.arguments.id)
-          #set($user = $context.identity.username)
+          #set($userSub = $context.identity.sub)
 
           "key": {
             "index": $util.dynamodb.toDynamoDBJson($id),
-            "user": $util.dynamodb.toDynamoDBJson($user)
+            "userSub": $util.dynamodb.toDynamoDBJson($userSub)
           },
           "consistentRead": true
         }

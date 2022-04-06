@@ -14,12 +14,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "index"
           AttributeType: "S"
-        - AttributeName: "user"
+        - AttributeName: "userSub"
           AttributeType: "S"
       KeySchema:
         - AttributeName: "index"
           KeyType: "HASH"
-        - AttributeName: "user"
+        - AttributeName: "userSub"
           KeyType: "RANGE"
       StreamSpecification:
         StreamViewType: NEW_IMAGE
