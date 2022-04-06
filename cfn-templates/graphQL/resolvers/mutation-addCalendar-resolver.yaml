@@ -22,14 +22,13 @@ Resources:
 
           #set($user = $context.identity.username)
           #set($userSub = $context.identity.sub)
+          #set($atts = $context.arguments.calendar)
+          #set($atts.user = $user)
 
           "key": {
             "index": $util.dynamodb.toDynamoDBJson($util.autoUlid()),
             "userSub": $util.dynamodb.toDynamoDBJson($userSub)
           },
-          "attributeValues": $util.dynamodb.toMapValuesJson({
-            $context.arguments.calendar,
-            "user":$user
-          })
+          "attributeValues": $util.dynamodb.toMapValuesJson($atts)
         }
       ResponseMappingTemplate: $util.toJson($context.result)
