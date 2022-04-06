@@ -13,7 +13,7 @@ Resources:
     Properties:
       ApiId: !Ref GraphQLApiId
       TypeName: Query
-      FieldName: calendar
+      FieldName: cardPreview
       DataSourceName: !Ref DynamoDBDataSourceName
       RequestMappingTemplate: |
         { 
