@@ -10,7 +10,7 @@ Resources:
   DynamoDBTableTemp:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref TableName
+      TableName: !Sub "${TableName}-temp"
       AttributeDefinitions:
         - AttributeName: "index"
           AttributeType: "S"
