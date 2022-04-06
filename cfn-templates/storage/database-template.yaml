@@ -7,10 +7,10 @@ Parameters:
     Default: Calendar-Year
 
 Resources:
-  DynamoDBTableTemp:
+  DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "${TableName}-temp"
+      TableName: !Ref TableName
       AttributeDefinitions:
         - AttributeName: "index"
           AttributeType: "S"
@@ -29,11 +29,11 @@ Resources:
 
 Outputs:
   DBName:
-    Value: !Ref DynamoDBTableTemp
+    Value: !Ref DynamoDBTable
     Description: Database table name
   DBRegion:
     Value: !Ref "AWS::Region"
     Description: Database table name
   DBStreamArn:
-    Value: !GetAtt DynamoDBTableTemp.StreamArn
+    Value: !GetAtt DynamoDBTable.StreamArn
     Description: Database stream arn
