@@ -7,7 +7,7 @@ Parameters:
     Default: Calendar-Year
 
 Resources:
-  DynamoDBTable:
+  DynamoDBTableTemp:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref TableName
