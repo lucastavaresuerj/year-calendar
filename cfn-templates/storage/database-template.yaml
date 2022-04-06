@@ -29,11 +29,11 @@ Resources:
 
 Outputs:
   DBName:
-    Value: !Ref DynamoDBTable
+    Value: !Ref DynamoDBTableTemp
     Description: Database table name
   DBRegion:
     Value: !Ref "AWS::Region"
     Description: Database table name
   DBStreamArn:
-    Value: !GetAtt DynamoDBTable.StreamArn
+    Value: !GetAtt DynamoDBTableTemp.StreamArn
     Description: Database stream arn
