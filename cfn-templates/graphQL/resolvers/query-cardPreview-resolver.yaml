@@ -20,17 +20,14 @@ Resources:
           "version": "2018-05-29",
           "operation": "Scan",
 
-          #set($user = $context.identity.username)
+          #set($sub = $context.identity.sub)
           #set($nextToken = $util.defaultIfNullOrBlank($context.arguments.pagination.nextToken, null))
           #set($limit = $util.defaultIfNull($context.arguments.pagination.limit, 20))
           
           "filter": {
-            "expression": "#user = :username",
-            "expressionNames": {
-              "#user": "user"
-            },
+            "expression": "userSub = :sub",
             "expressionValues": {
-              ":username": $util.dynamodb.toDynamoDBJson($user)
+              ":sub": $util.dynamodb.toDynamoDBJson($sub)
             }
           },
           "nextToken": $util.toJson($nextToken),
