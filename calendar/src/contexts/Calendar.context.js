@@ -37,11 +37,7 @@ const defaultMonth = {
   },
 };
 
-export default function CalendarProvider({
-  children,
-  yearNumber,
-  calendarData,
-}) {
+export default function CalendarProvider({ children, calendarData }) {
   const [data, setData] = useState(
     calendarData || {
       name: "",
@@ -83,9 +79,7 @@ export default function CalendarProvider({
   }
 
   return (
-    <CalendarContext.Provider
-      value={{ data, yearNumber, changeMonthConfig, changeConfig }}
-    >
+    <CalendarContext.Provider value={{ data, changeMonthConfig, changeConfig }}>
       {children}
     </CalendarContext.Provider>
   );
