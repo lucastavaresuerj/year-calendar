@@ -1,8 +1,8 @@
 import React from "react";
 import { useRoutes, Navigate } from "react-router-dom";
 
-import { NavOutlet, AuthOutlet } from "outlets";
-import { Home, SignIn, SignUp, Code, MyCalendars } from "./pages/index";
+import { NavOutlet, AuthOutlet, PrivateOutlet } from "outlets";
+import { Home, SignIn, SignUp, Code, MyCalendars } from "pages/index";
 
 export default function Routes() {
   function multipleRoutes({ routes = [], element, ...props }) {
@@ -12,15 +12,21 @@ export default function Routes() {
   return useRoutes([
     {
       path: "/",
-      element: <NavOutlet />,
+      element: <PrivateOutlet redirectTo={"/auth"} />,
       children: [
         {
           path: "/",
-          element: <Home />,
-        },
-        {
-          path: "my-calendars",
-          element: <MyCalendars />,
+          element: <NavOutlet />,
+          children: [
+            {
+              path: "/",
+              element: <Home />,
+            },
+            {
+              path: "my-calendars",
+              element: <MyCalendars />,
+            },
+          ],
         },
       ],
     },

@@ -3,6 +3,7 @@ import { Auth } from "aws-amplify";
 
 export const UserContext = createContext({
   user: null,
+  isAuth: false,
   signIn: () => {},
   signOut: () => {},
   signUp: () => {},
@@ -16,11 +17,12 @@ export default function UserProvider({ children }) {
     userConfirmed: false,
     userSub: "",
   });
+  const [isAuth, setIsAuth] = useState(false);
 
   async function signIn({ username, password }) {
     try {
       const user = await Auth.signIn(username, password);
-      console.log(user);
+      setIsAuth(true);
     } catch (err) {
       if (err.name === "UserNotConfirmedException") {
         setUser({ ...user, username, password });
@@ -38,6 +40,7 @@ export default function UserProvider({ children }) {
         attributes: { email },
       });
       setUser({ username: user.getUsername(), userConfirmed, userSub });
+      setIsAuth(true);
     } catch (err) {
       setUser(null);
       throw err;
@@ -55,7 +58,6 @@ export default function UserProvider({ children }) {
   }
 
   async function confirmVrfCode({ code, username = user.username }) {
-    console.log(code, username);
     try {
       await Auth.confirmSignUp(username, code);
     } catch (err) {
@@ -70,6 +72,7 @@ export default function UserProvider({ children }) {
     try {
       await Auth.signOut();
       setUser(null);
+      setIsAuth(false);
     } catch (err) {
       console.log("error signing out: ", err.name);
       throw err;
@@ -80,6 +83,7 @@ export default function UserProvider({ children }) {
     <UserContext.Provider
       value={{
         user,
+        isAuth,
         signIn,
         signOut,
         signUp,
