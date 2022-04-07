@@ -37,6 +37,8 @@ Resources:
 
   Resolvers:
     Type: "AWS::CloudFormation::Stack"
+    DependsOn:
+      - Schema
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${S3BucketDeploy}/cfn-templates/graphQL/resolvers/resolvers.yaml"
       Parameters:

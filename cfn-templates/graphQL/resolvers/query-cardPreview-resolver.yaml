@@ -25,7 +25,7 @@ Resources:
           #set($limit = $util.defaultIfNull($context.arguments.pagination.limit, 20))
 
           "filter" : {
-            "expression": "user = :user",
+            "expression": "contains(user,:user)",
             "expressionValues": {
               ":user": $util.dynamodb.toDynamoDBJson($user)
             }

@@ -34,7 +34,7 @@ type PagCalendarPreview implements Pagination {
 
 extend type Query {
   calendar(id: String): Calendar
-  cardPreview(pagination: InpPagination): [PagCalendarPreview!] # Pagination
+  cardPreview(pagination: InpPagination): PagCalendarPreview # Pagination
 }
 
 extend type Mutation {
