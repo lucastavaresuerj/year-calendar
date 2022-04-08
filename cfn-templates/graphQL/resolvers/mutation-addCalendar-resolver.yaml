@@ -18,7 +18,7 @@ Resources:
   PopulateMonthsAttFun:
     Type: AWS::AppSync::FunctionConfiguration
     Properties:
-      ApiId: !Ref GraphqlApiId
+      ApiId: !Ref GraphQLApiId
       Name: PopulateMonths
       DataSourceName: !GetAtt NoneSource.Name
       FunctionVersion: "2018-05-29"
