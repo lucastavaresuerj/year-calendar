@@ -76,6 +76,7 @@ Resources:
     Properties:
       ApiId: !Ref GraphQLApiId
       DataSourceName: !Ref DynamoDBDataSourceName
+      FunctionVersion: "2018-05-29"
       RequestMappingTemplate: |
         { 
           "version": "2018-05-29",
