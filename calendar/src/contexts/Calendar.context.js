@@ -1,5 +1,7 @@
 import React, { createContext, useState } from "react";
 
+import { makeObjectCalendar } from "./calendarObject";
+
 export const CalendarContext = createContext({
   data: null,
   yearNumber: null,
@@ -7,63 +9,8 @@ export const CalendarContext = createContext({
   changeConfig: () => {},
 });
 
-const weekday = {
-  backgroundColor: null,
-  textColor: null,
-  textStyle: null,
-  fontWeight: null,
-  size: null,
-};
-
-const defaultMonth = {
-  header: {
-    rounded: true,
-    backgroundColor: null,
-    space: null,
-    number: {
-      showNumber: false,
-      side: "RIGHT",
-    },
-    monthName: {
-      aling: null,
-      size: null,
-      style: null,
-      fontWeight: null,
-      textColor: null,
-    },
-  },
-  monthDay: {
-    config: null,
-  },
-};
-
 export default function CalendarProvider({ children, calendarData }) {
-  const [data, setData] = useState(
-    calendarData || {
-      name: "",
-      index: "",
-      year: 2022,
-      colNumber: 3,
-      title: {
-        name: "",
-        config: {
-          aling: null,
-          size: null,
-          style: null,
-          fontWeight: null,
-          textColor: null,
-        },
-      },
-      defaultMonth: {
-        ...defaultMonth,
-        weekday,
-      },
-      months: Array(12).fill({
-        ...defaultMonth,
-        weekdays: Array(7).fill(weekday),
-      }),
-    }
-  );
+  const [data, setData] = useState(calendarData || makeObjectCalendar());
 
   function changeConfig(conf) {
     const { months } = data;

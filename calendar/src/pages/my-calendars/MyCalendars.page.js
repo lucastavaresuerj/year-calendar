@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import query from "./cardPreview.graphql";
+
 import { graphql } from "graphql/query";
 import CalendarProvider from "contexts/Calendar.context";
 import { CalendarCard } from "components";
@@ -9,19 +11,6 @@ export default function MyCalendars() {
   const [nextToken, setNextToken] = useState();
 
   useEffect(async () => {
-    const query = `#graphql
-      query MyCalendarsPage($pagination: InpPagination) {
-        cardPreview(pagination: $pagination) {
-          nextToken
-          items {
-            user
-            year
-            name
-            index
-          }
-        }
-      }
-    `;
     const {
       data: { cardPreview },
     } = await graphql(query, {
@@ -36,8 +25,8 @@ export default function MyCalendars() {
 
   return (
     <>
-      {calendars.map((calendar) => (
-        <CalendarProvider calendarData={calendar}>
+      {calendars.map((calendar, index) => (
+        <CalendarProvider calendarData={calendar} key={`card-${index}`}>
           {/*<CalendarCard />*/}
         </CalendarProvider>
       ))}
