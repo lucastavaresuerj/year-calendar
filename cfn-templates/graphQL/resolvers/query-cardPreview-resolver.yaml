@@ -33,4 +33,6 @@ Resources:
           "nextToken": $util.toJson($nextToken),
           "limit": $limit
         }
-      ResponseMappingTemplate: $util.toJson($context.result)
+      ResponseMappingTemplate: |
+        #set($context.result.month = $context.result.months[0])
+        $util.toJson($context.result)

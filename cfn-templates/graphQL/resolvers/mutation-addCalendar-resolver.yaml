@@ -8,12 +8,73 @@ Parameters:
     Type: String
 
 Resources:
-  AppSyncResolver:
-    Type: AWS::AppSync::Resolver
+  NoneSource:
+    Type: AWS::AppSync::DataSource
     Properties:
       ApiId: !Ref GraphQLApiId
-      TypeName: Mutation
-      FieldName: addCalendar
+      Name: !Sub "NoneSource_${GraphQLApiId}"
+      Type: NONE
+
+  PopulateMonthsAttFun:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !Ref GraphqlApiId
+      Name: PopulateMonths
+      DataSourceName: !GetAtt NoneSource.Name
+      FunctionVersion: "2018-05-29"
+      RequestMappingTemplate: |
+        { 
+          "version": "2018-05-29",
+          #if($context.arguments.calendar.months = $null)
+            #set($rangeMonths = [0..11])
+            #set($rangeWeekDayss = [0..6])
+            #set($months = [])
+            #set($month = {
+              "header": {
+                "rounded": true,
+                "backgroundColor": null,
+                "space": null,
+                "number": {
+                  "showNumber": false,
+                  "side": "RIGHT",
+                },
+                "monthName": {
+                  "aling": null,
+                  "size": null,
+                  "style": null,
+                  "fontWeight": null,
+                  "textColor": null,
+                },
+              },
+              "monthDay": {
+                "config": null,
+              },
+              "weekdays": [],
+            })
+            #set($weekday = {
+              "backgroundColor": null,
+              "textColor": null,
+              "textStyle": null,
+              "fontWeight": null,
+              "size": null,
+            })
+            #foreach($monthNumber in $rangeMonths)
+              $util.qr($months.add($month))
+              #foreach($weekNumber in $rangeWeekDayss)
+                $util.qr($months[monthNumber].weekdays.add($weekday))
+              #end
+            #end
+            $util.qr($context.stash.put("months", $months))
+          #else
+            $util.qr($context.stash.put("months", $context.arguments.calendar.months))
+          #end
+        }
+      ResponseMappingTemplate: $util.toJson($context.result)
+
+  PutItemAtDynamoDbFun:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !Ref GraphQLApiId
       DataSourceName: !Ref DynamoDBDataSourceName
       RequestMappingTemplate: |
         { 
@@ -24,6 +85,7 @@ Resources:
           #set($userSub = $context.identity.sub)
           #set($atts = $context.arguments.calendar)
           #set($atts.user = $user)
+          #set($atts.months = $context.stash.months)
 
           "key": {
             "index": $util.dynamodb.toDynamoDBJson($util.autoUlid()),
@@ -31,4 +93,17 @@ Resources:
           },
           "attributeValues": $util.dynamodb.toMapValuesJson($atts)
         }
+      ResponseMappingTemplate: $util.toJson($context.result)
+
+  AppSyncResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !Ref GraphQLApiId
+      TypeName: Mutation
+      FieldName: addCalendar
+      Kind: PIPELINE
+      PipelineConfig:
+        Functions:
+          - !GetAtt PopulateMonthsAttFun.FunctionId
+          - !GetAtt PutItemAtDynamoDbFun.FunctionId
       ResponseMappingTemplate: $util.toJson($context.result)

@@ -24,7 +24,7 @@ type CalendarPreview {
   user: String
   year: Int
   title: Title
-  months: [Month!] # Should return only the first month
+  month: Month # Should return only the first month
 }
 
 type PagCalendarPreview implements Pagination {
