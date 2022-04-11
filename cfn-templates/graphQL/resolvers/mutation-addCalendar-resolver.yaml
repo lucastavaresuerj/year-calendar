@@ -75,6 +75,7 @@ Resources:
     Type: AWS::AppSync::FunctionConfiguration
     Properties:
       ApiId: !Ref GraphQLApiId
+      Name: PutAtts
       DataSourceName: !Ref DynamoDBDataSourceName
       FunctionVersion: "2018-05-29"
       RequestMappingTemplate: |
