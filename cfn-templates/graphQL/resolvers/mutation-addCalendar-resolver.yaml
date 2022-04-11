@@ -108,4 +108,8 @@ Resources:
         Functions:
           - !GetAtt PopulateMonthsAttFun.FunctionId
           - !GetAtt PutItemAtDynamoDbFun.FunctionId
+      RequestMappingTemplate: |
+        {
+          "version": "2018-05-29",
+        }
       ResponseMappingTemplate: $util.toJson($context.result)
